@@ -3,9 +3,18 @@ session_start();
 require_once __DIR__ . '/../includes/db.php';
 
 // Redirect if already logged in
-if (!empty($_SESSION['user']) && in_array($_SESSION['user']['role'], ['coordinator', 'admin'])) {
-    header('Location: ../coordinator/index.php');
-    exit;
+if (!empty($_SESSION['user'])) {
+    $role = $_SESSION['user']['role'];
+    if ($role === 'admin') {
+        header('Location: ' . base_url('admin/'));
+        exit;
+    } elseif ($role === 'coordinator') {
+        header('Location: ' . base_url('coordinator/'));
+        exit;
+    } elseif ($role === 'teacher') {
+        header('Location: ' . base_url('teacher/'));
+        exit;
+    }
 }
 
 $error = '';
@@ -23,20 +32,29 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
             $user = $stmt->fetch();
 
             if ($user && password_verify($password, $user['password'])) {
-                if (in_array($user['role'], ['coordinator', 'admin'])) {
-                    $_SESSION['user'] = [
-                        'id'            => $user['id'],
-                        'username'      => $user['username'],
-                        'full_name'     => $user['full_name'],
-                        'email'         => $user['email'],
-                        'role'          => $user['role'],
-                        'profile_photo' => $user['profile_photo'],
-                    ];
+                $_SESSION['user'] = [
+                    'id'            => $user['id'],
+                    'username'      => $user['username'],
+                    'full_name'     => $user['full_name'],
+                    'email'         => $user['email'],
+                    'role'          => $user['role'],
+                    'profile_photo' => $user['profile_photo'],
+                ];
 
-                    header('Location: ../coordinator/index.php');
+                // Redirect based on role
+                if ($user['role'] === 'admin') {
+                    header('Location: ' . base_url('admin/'));
+                    exit;
+                } elseif ($user['role'] === 'coordinator') {
+                    header('Location: ' . base_url('coordinator/'));
+                    exit;
+                } elseif ($user['role'] === 'teacher') {
+                    header('Location: ' . base_url('teacher/'));
                     exit;
                 } else {
-                    $error = 'Access Denied: Only coordinators and administrators are permitted to enter.';
+                    // Default fallback
+                    header('Location: ' . base_url('index.php'));
+                    exit;
                 }
             } else {
                 $error = 'Invalid username or password.';
@@ -77,7 +95,7 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
                 <img src="https://kauzariyya.com/wp-content/uploads/2024/01/Kauzariyya-Old-Curve.png" alt="Logo" class="w-full h-full object-contain">
             </div>
             <div>
-                <h1 class="text-2xl font-bold bg-gradient-to-r from-emerald-400 to-blue-400 bg-clip-text text-transparent">Coordinator Login</h1>
+                <h1 class="text-2xl font-bold bg-gradient-to-r from-emerald-400 to-blue-400 bg-clip-text text-transparent">Portal Login</h1>
                 <p class="text-xs text-slate-400 uppercase tracking-widest mt-1">Al Jamiathul Kauzariyya</p>
             </div>
         </div>
@@ -107,15 +125,23 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
                 </div>
             </div>
 
-            <div class="pt-2">
+            <div class="pt-2 space-y-3">
                 <button type="submit" class="w-full bg-gradient-to-r from-emerald-400 to-blue-500 text-slate-950 font-bold py-3.5 rounded-xl hover:shadow-lg hover:shadow-emerald-400/20 transition duration-300">
                     Sign In
                 </button>
+                <div class="relative flex py-2 items-center">
+                    <div class="flex-grow border-t border-white/10"></div>
+                    <span class="flex-shrink mx-4 text-[10px] text-slate-500 uppercase tracking-widest font-semibold">Or</span>
+                    <div class="flex-grow border-t border-white/10"></div>
+                </div>
+                <a href="<?= base_url('auth/google.php') ?>" class="w-full flex items-center justify-center gap-2 border border-white/15 hover:bg-white/5 text-slate-200 font-bold py-3 rounded-xl transition duration-300 text-xs">
+                    <i class="fa-brands fa-google text-emerald-400"></i> Sign in with Google
+                </a>
             </div>
         </form>
 
         <div class="text-center">
-            <a href="../index.php" class="inline-flex items-center gap-1.5 text-xs text-slate-400 hover:text-white transition">
+            <a href="<?= base_url('index.php') ?>" class="inline-flex items-center gap-1.5 text-xs text-slate-400 hover:text-white transition">
                 <i class="fa-solid fa-arrow-left"></i> Back to Homepage
             </a>
         </div>

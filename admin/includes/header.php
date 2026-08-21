@@ -2,8 +2,8 @@
 session_start();
 require_once __DIR__ . '/../../includes/db.php';
 
-// Authentication Check: Only allow coordinators and admins
-if (empty($_SESSION['user']) || !in_array($_SESSION['user']['role'], ['coordinator', 'admin'])) {
+// Authentication Check: Only allow admins
+if (empty($_SESSION['user']) || $_SESSION['user']['role'] !== 'admin') {
     header('Location: ' . base_url('login'));
     exit;
 }
@@ -14,6 +14,7 @@ $errorMessage = $_SESSION['msg_error'] ?? '';
 unset($_SESSION['msg_success'], $_SESSION['msg_error']);
 
 // Fetch common counts for sidebar/overview panels
+$totalCoordinators = (int)$pdo->query("SELECT COUNT(*) FROM users WHERE role = 'coordinator'")->fetchColumn();
 $totalStudents = (int)$pdo->query("SELECT COUNT(*) FROM users WHERE role = 'student'")->fetchColumn();
 $totalTeachers = (int)$pdo->query("SELECT COUNT(*) FROM users WHERE role = 'teacher'")->fetchColumn();
 $totalSupervisors = (int)$pdo->query("SELECT COUNT(*) FROM users WHERE role = 'supervisor'")->fetchColumn();
@@ -22,15 +23,19 @@ $totalClasses = (int)$pdo->query("SELECT COUNT(*) FROM classes")->fetchColumn();
 
 // Detect active page to determine document title
 $currentPage = basename($_SERVER['PHP_SELF']);
-$pageTitle = 'Dashboard';
-if ($currentPage === 'courses.php') {
-    $pageTitle = 'Courses & Classes Tree';
-} elseif ($currentPage === 'teachers.php') {
-    $pageTitle = 'Teachers Registry';
+$pageTitle = 'Admin Dashboard';
+if ($currentPage === 'coordinators.php') {
+    $pageTitle = 'Coordinators Registry';
 } elseif ($currentPage === 'supervisors.php') {
     $pageTitle = 'Supervisors Registry';
+} elseif ($currentPage === 'teachers.php') {
+    $pageTitle = 'Teachers Registry';
 } elseif ($currentPage === 'students.php') {
     $pageTitle = 'Student Directory';
+} elseif ($currentPage === 'courses.php') {
+    $pageTitle = 'Courses & Classes';
+} elseif ($currentPage === 'audits.php') {
+    $pageTitle = 'Class Audits';
 }
 ?>
 <!DOCTYPE html>
@@ -38,7 +43,7 @@ if ($currentPage === 'courses.php') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kauzariyya - <?= htmlspecialchars($pageTitle) ?></title>
+    <title>Kauzariyya Admin - <?= htmlspecialchars($pageTitle) ?></title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -62,7 +67,7 @@ if ($currentPage === 'courses.php') {
             <div class="w-8 h-8 rounded-full overflow-hidden border flex items-center justify-center p-0.5" style="background:#123b47; border-color:rgba(109,204,141,0.2);">
                 <img src="https://kauzariyya.com/wp-content/uploads/2024/01/Kauzariyya-Old-Curve.png" alt="Logo" class="w-full h-full object-contain">
             </div>
-            <span class="text-sm font-bold tracking-wide uppercase brand-text-gradient">Coordinator</span>
+            <span class="text-sm font-bold tracking-wide uppercase brand-text-gradient">Administrator</span>
         </div>
         <button onclick="toggleMobileSidebar(true)" class="w-10 h-10 flex items-center justify-center rounded-xl border transition" style="background:rgba(109,204,141,0.05); border-color:rgba(109,204,141,0.15);" title="Open Sidebar Menu">
             <i class="fa-solid fa-bars text-lg" style="color:#ecf3d6;"></i>

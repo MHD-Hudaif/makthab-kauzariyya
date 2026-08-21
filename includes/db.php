@@ -64,6 +64,23 @@ if (!function_exists('env')) {
         };
     }
 }
+if (!function_exists('base_url')) {
+    function base_url(string $path = ''): string {
+        $baseUrl = env('APP_BASE_URL', 'auto');
+        if ($baseUrl === 'auto') {
+            $docRoot = str_replace('\\', '/', realpath($_SERVER['DOCUMENT_ROOT'] ?? ''));
+            $projRoot = str_replace('\\', '/', dirname(__DIR__));
+            
+            if ($docRoot !== '' && str_starts_with($projRoot, $docRoot)) {
+                $subDir = substr($projRoot, strlen($docRoot));
+                $baseUrl = rtrim($subDir, '/\\');
+            } else {
+                $baseUrl = '';
+            }
+        }
+        return '/' . ltrim(rtrim($baseUrl, '/') . '/' . ltrim($path, '/'), '/');
+    }
+}
 
 // Load .env from the root folder
 load_env_file(dirname(__DIR__) . '/.env');
