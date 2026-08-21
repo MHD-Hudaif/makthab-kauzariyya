@@ -75,6 +75,8 @@ $sql .= " ORDER BY created_at DESC";
 $stmt = $pdo->prepare($sql);
 $stmt->execute($params);
 $usersList = $stmt->fetchAll();
+
+require_once __DIR__ . '/includes/sidebar.php';
 ?>
 
 <!-- Main Panel Header -->

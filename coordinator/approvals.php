@@ -81,6 +81,8 @@ $stmtClasses = $pdo->prepare("
 ");
 $stmtClasses->execute();
 $classrooms = $stmtClasses->fetchAll();
+
+require_once __DIR__ . '/includes/sidebar.php';
 ?>
 
 <!-- Tab Heading -->
