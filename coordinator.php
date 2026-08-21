@@ -377,22 +377,37 @@ foreach ($classes as $class) {
             </div>
 
             <!-- Tab Menu -->
-            <nav class="space-y-2 flex flex-col">
-                <button onclick="switchTab('overview')" id="btn-overview" class="tab-btn active w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition border border-transparent text-emerald-400 bg-white/10 text-left">
-                    <i class="fa-solid fa-chart-pie w-5"></i> Overview
-                </button>
-                <button onclick="switchTab('courses')" id="btn-courses" class="tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition border border-transparent text-slate-350 hover:text-white text-left">
-                    <i class="fa-solid fa-graduation-cap w-5"></i> Courses & Classes
-                </button>
-                <button onclick="switchTab('teachers')" id="btn-teachers" class="tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition border border-transparent text-slate-350 hover:text-white text-left">
-                    <i class="fa-solid fa-chalkboard-user w-5"></i> Teachers
-                </button>
-                <button onclick="switchTab('supervisors')" id="btn-supervisors" class="tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition border border-transparent text-slate-350 hover:text-white text-left">
-                    <i class="fa-solid fa-user-tie w-5"></i> Supervisors
-                </button>
-                <button onclick="switchTab('students')" id="btn-students" class="tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition border border-transparent text-slate-350 hover:text-white text-left">
-                    <i class="fa-solid fa-user-graduate w-5"></i> Students
-                </button>
+            <!-- Tab Menu (Grouped by Category) -->
+            <nav class="space-y-4 flex flex-col">
+                <!-- Group 1: General -->
+                <div class="space-y-1.5">
+                    <span class="block px-4 text-[9px] font-bold text-slate-450 uppercase tracking-widest">General</span>
+                    <button onclick="switchTab('overview')" id="btn-overview" class="tab-btn active w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold transition border border-transparent text-emerald-400 bg-white/10 text-left">
+                        <i class="fa-solid fa-chart-pie w-4"></i> Overview
+                    </button>
+                </div>
+
+                <!-- Group 2: Curriculum -->
+                <div class="space-y-1.5">
+                    <span class="block px-4 text-[9px] font-bold text-slate-450 uppercase tracking-widest">Curriculum</span>
+                    <button onclick="switchTab('courses')" id="btn-courses" class="tab-btn w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold transition border border-transparent text-slate-350 hover:text-white text-left">
+                        <i class="fa-solid fa-graduation-cap w-4"></i> Courses & Classes
+                    </button>
+                </div>
+
+                <!-- Group 3: Users & Staff -->
+                <div class="space-y-1.5">
+                    <span class="block px-4 text-[9px] font-bold text-slate-450 uppercase tracking-widest">Directory</span>
+                    <button onclick="switchTab('teachers')" id="btn-teachers" class="tab-btn w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold transition border border-transparent text-slate-350 hover:text-white text-left">
+                        <i class="fa-solid fa-chalkboard-user w-4"></i> Teachers
+                    </button>
+                    <button onclick="switchTab('supervisors')" id="btn-supervisors" class="tab-btn w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold transition border border-transparent text-slate-350 hover:text-white text-left">
+                        <i class="fa-solid fa-user-tie w-4"></i> Supervisors
+                    </button>
+                    <button onclick="switchTab('students')" id="btn-students" class="tab-btn w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold transition border border-transparent text-slate-350 hover:text-white text-left">
+                        <i class="fa-solid fa-user-graduate w-4"></i> Students
+                    </button>
+                </div>
             </nav>
         </div>
 
