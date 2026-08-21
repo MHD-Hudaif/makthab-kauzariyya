@@ -60,48 +60,7 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
     <title>Kauzariyya Portal - Login</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <style>
-        /* Liquid Blob Animations */
-        @keyframes morph-blob-1 {
-            0%, 100% { border-radius: 42% 58% 70% 30% / 45% 45% 55% 55%; transform: translate(0, 0) scale(1); }
-            50% { border-radius: 70% 30% 52% 48% / 60% 40% 60% 40%; transform: translate(40px, 30px) scale(1.1); }
-        }
-        @keyframes morph-blob-2 {
-            0%, 100% { border-radius: 70% 30% 52% 48% / 60% 40% 60% 40%; transform: translate(0, 0) scale(1); }
-            50% { border-radius: 42% 58% 70% 30% / 45% 45% 55% 55%; transform: translate(-40px, -30px) scale(1.15); }
-        }
-
-        .animate-blob-1 {
-            animation: morph-blob-1 18s infinite alternate ease-in-out;
-        }
-        .animate-blob-2 {
-            animation: morph-blob-2 15s infinite alternate ease-in-out;
-        }
-
-        /* Glassmorphism Styles */
-        .glass-panel {
-            background: rgba(255, 255, 255, 0.06);
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.35);
-        }
-        
-        .glass-input {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: #fff;
-            transition: all 0.3s ease;
-        }
-        
-        .glass-input:focus {
-            background: rgba(255, 255, 255, 0.1);
-            border-color: rgba(52, 211, 153, 0.5); /* emerald-400 */
-            outline: none;
-            box-shadow: 0 0 10px 0 rgba(52, 211, 153, 0.15);
-        }
-    </style>
+    <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body class="relative min-h-screen bg-slate-950 text-slate-100 flex items-center justify-center p-6 overflow-hidden">
 
