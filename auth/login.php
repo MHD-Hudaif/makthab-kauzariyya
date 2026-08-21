@@ -14,6 +14,9 @@ if (!empty($_SESSION['user'])) {
     } elseif ($role === 'teacher') {
         header('Location: ' . base_url('teacher/'));
         exit;
+    } elseif ($role === 'student') {
+        header('Location: ' . base_url('student/'));
+        exit;
     } else {
         // This role does not have a dedicated portal yet. Do not show the
         // sign-in form again while the user already has a valid session.
@@ -56,6 +59,9 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
                     exit;
                 } elseif ($user['role'] === 'teacher') {
                     header('Location: ' . base_url('teacher/'));
+                    exit;
+                } elseif ($user['role'] === 'student') {
+                    header('Location: ' . base_url('student/'));
                     exit;
                 } else {
                     // Default fallback

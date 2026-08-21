@@ -14,6 +14,9 @@ if (!empty($_SESSION['user'])) {
     } elseif ($role === 'teacher') {
         header('Location: ' . base_url('teacher/'));
         exit;
+    } elseif ($role === 'student') {
+        header('Location: ' . base_url('student/'));
+        exit;
     } else {
         header('Location: ' . base_url('index.php'));
         exit;
@@ -96,7 +99,7 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
         ];
 
         $_SESSION['msg_success'] = "Welcome to Maktab Kauzariyya, {$fullName}! Your account has been registered.";
-        header('Location: ' . base_url('index.php'));
+        header('Location: ' . base_url('student/'));
         exit;
 
     } catch (Exception $e) {
