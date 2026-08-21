@@ -1,9 +1,0 @@
-# Disable ModSecurity for authorization callback compatibility (stops 406 Not Acceptable errors on Google OAuth redirects)
-<IfModule mod_security.c>
-    SecFilterEngine Off
-    SecFilterScanPOST Off
-</IfModule>
-
-<IfModule mod_security2.c>
-    SecRuleEngine Off
-</IfModule>

@@ -183,3 +183,60 @@ try {
         $pdo->exec(file_get_contents(__DIR__ . '/../database/install_coordinator.sql'));
     }
 }
+
+// Ensure dynamic targets columns exist on courses table
+try {
+    $pdo->query("SELECT target_type FROM `courses` LIMIT 1");
+} catch (PDOException $e) {
+    try {
+        $pdo->exec("ALTER TABLE `courses` ADD COLUMN `target_type` ENUM('lesson', 'juz') NOT NULL DEFAULT 'lesson', ADD COLUMN `total_targets` INT NOT NULL DEFAULT 1");
+        $pdo->exec("UPDATE `courses` SET `target_type` = 'lesson', `total_targets` = 28 WHERE `code` = 'TJ' OR `code` = 'SPECIAL'");
+        $pdo->exec("UPDATE `courses` SET `target_type` = 'juz', `total_targets` = 5 WHERE `code` = 'NZ' OR `code` = 'SHARIAH'");
+        $pdo->exec("UPDATE `courses` SET `target_type` = 'juz', `total_targets` = 30 WHERE `code` = 'HZ' OR `code` = 'HIFZ'");
+    } catch (PDOException $ex) {}
+}
+
+// Progress logs, class audits, and leaves tables
+try {
+    $pdo->query("SELECT 1 FROM `progress_logs` LIMIT 1");
+} catch (PDOException $e) {
+    if ($e->getCode() == '42S02' || str_contains($e->getMessage(), "doesn't exist")) {
+        if (file_exists(__DIR__ . '/../database/install_progress.sql')) {
+            $sql = file_get_contents(__DIR__ . '/../database/install_progress.sql');
+            $queries = explode(';', $sql);
+            foreach ($queries as $q) {
+                $q = trim($q);
+                if ($q !== '') {
+                    try {
+                        $pdo->exec($q);
+                    } catch (PDOException $ex) {}
+                }
+            }
+        }
+    }
+}
+
+// Weekly reports table
+try {
+    $pdo->query("SELECT 1 FROM `weekly_reports` LIMIT 1");
+} catch (PDOException $e) {
+    if ($e->getCode() == '42S02' || str_contains($e->getMessage(), "doesn't exist")) {
+        try {
+            $pdo->exec("
+                CREATE TABLE IF NOT EXISTS `weekly_reports` (
+                    `id` INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+                    `teacher_id` INT UNSIGNED NOT NULL,
+                    `class_id` INT UNSIGNED NOT NULL,
+                    `report_week` DATE NOT NULL,
+                    `topics_covered` TEXT,
+                    `slow_learners` TEXT,
+                    `attendance_remarks` TEXT,
+                    `general_feedback` TEXT,
+                    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    FOREIGN KEY (`teacher_id`) REFERENCES `users`(`id`) ON DELETE CASCADE,
+                    FOREIGN KEY (`class_id`) REFERENCES `classes`(`id`) ON DELETE CASCADE
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+            ");
+        } catch (PDOException $ex) {}
+    }
+}
