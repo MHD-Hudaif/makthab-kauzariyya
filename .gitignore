@@ -1,0 +1,5 @@
+error_log
+*.nfd-backup
+.htaccess.nfd-backup
+Thumbs.db
+.DS_Store
