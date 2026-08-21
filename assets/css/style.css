@@ -1,155 +1,193 @@
-/* Global Liquid Glass Theme Stylesheet */
+/* ═══════════════════════════════════════════════════════════
+   Maktab Kauzariyya — Global Stylesheet
+   Brand Identity: Quicksand + Urbanist · Teal/Green Palette
+   ═══════════════════════════════════════════════════════════ */
 
-/* 1. Liquid Glass organic metaball animations */
+/* ─── Google Fonts ─────────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&family=Urbanist:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&display=swap');
+
+/* ─── Brand CSS Custom Properties ──────────────────────────── */
+:root {
+    --cream:        #ecf3d6;
+    --cream-light:  #f1f6d0;
+    --cyan-light:   #a7ebf3;
+    --green-fresh:  #6dcc8d;
+    --teal-mid:     #41aebd;
+    --teal-dark:    #3e6d6c;
+    --navy:         #123b47;
+    --navy-deep:    #0e2e38;
+    --font-main:    'Quicksand', sans-serif;
+    --font-italic:  'Urbanist', sans-serif;
+}
+
+/* ─── Base font override ────────────────────────────────────── */
+*, *::before, *::after { font-family: var(--font-main); }
+
+/* ═══════════════════════════════════════════════════════════
+   1. Blob Animations
+   ═══════════════════════════════════════════════════════════ */
 @keyframes morph-blob-1 {
-    0%, 100% {
-        border-radius: 42% 58% 70% 30% / 45% 45% 55% 55%;
-        transform: translate(0, 0) scale(1);
-    }
-    33% {
-        border-radius: 70% 30% 52% 48% / 60% 40% 60% 40%;
-        transform: translate(60px, 40px) scale(1.1);
-    }
-    66% {
-        border-radius: 50% 50% 30% 70% / 50% 60% 40% 50%;
-        transform: translate(-30px, 60px) scale(0.9);
-    }
+    0%, 100% { border-radius: 42% 58% 70% 30% / 45% 45% 55% 55%; transform: translate(0, 0) scale(1); }
+    33%       { border-radius: 70% 30% 52% 48% / 60% 40% 60% 40%; transform: translate(60px, 40px) scale(1.1); }
+    66%       { border-radius: 50% 50% 30% 70% / 50% 60% 40% 50%; transform: translate(-30px, 60px) scale(0.9); }
 }
-
 @keyframes morph-blob-2 {
-    0%, 100% {
-        border-radius: 70% 30% 52% 48% / 60% 40% 60% 40%;
-        transform: translate(0, 0) scale(1);
-    }
-    50% {
-        border-radius: 42% 58% 70% 30% / 45% 45% 55% 55%;
-        transform: translate(-60px, -40px) scale(1.15);
-    }
+    0%, 100% { border-radius: 70% 30% 52% 48% / 60% 40% 60% 40%; transform: translate(0, 0) scale(1); }
+    50%       { border-radius: 42% 58% 70% 30% / 45% 45% 55% 55%; transform: translate(-60px, -40px) scale(1.15); }
 }
-
-.animate-blob-1 {
-    animation: morph-blob-1 25s infinite alternate ease-in-out;
+@keyframes morph-blob-3 {
+    0%, 100% { border-radius: 50% 50% 30% 70% / 50% 60% 40% 50%; transform: translate(0, 0) scale(1); }
+    50%       { border-radius: 70% 30% 52% 48% / 60% 40% 60% 40%; transform: translate(80px, -120px) scale(1.1); }
 }
+.animate-blob-1 { animation: morph-blob-1 25s infinite alternate ease-in-out; }
+.animate-blob-2 { animation: morph-blob-2 20s infinite alternate ease-in-out; }
+.animate-blob-3 { animation: morph-blob-3 22s infinite alternate ease-in-out; }
 
-.animate-blob-2 {
-    animation: morph-blob-2 20s infinite alternate ease-in-out;
-}
-
-/* 2. Glassmorphic preset utility classes */
+/* ═══════════════════════════════════════════════════════════
+   2. Glass Utility Classes
+   ═══════════════════════════════════════════════════════════ */
 .glass-panel {
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(109, 204, 141, 0.04);
     backdrop-filter: blur(24px);
     -webkit-backdrop-filter: blur(24px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.25);
+    border: 1px solid rgba(109, 204, 141, 0.12);
+    box-shadow: 0 8px 32px 0 rgba(14, 46, 56, 0.4);
 }
-
 .glass-card {
-    background: rgba(255, 255, 255, 0.03);
+    background: rgba(109, 204, 141, 0.03);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(109, 204, 141, 0.08);
+    box-shadow: 0 4px 20px 0 rgba(14, 46, 56, 0.2);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
-
 .glass-card:hover {
-    background: rgba(255, 255, 255, 0.06);
-    border-color: rgba(255, 255, 255, 0.15);
+    background: rgba(109, 204, 141, 0.07);
+    border-color: rgba(109, 204, 141, 0.18);
     transform: translateY(-2px);
+    box-shadow: 0 8px 28px 0 rgba(14, 46, 56, 0.3);
 }
-
 .glass-navbar {
-    background: rgba(255, 255, 255, 0.02);
+    background: rgba(18, 59, 71, 0.6);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    border-bottom: 1px solid rgba(109, 204, 141, 0.1);
 }
-
 .glass-input {
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    color: #fff;
+    background: rgba(109, 204, 141, 0.04);
+    border: 1px solid rgba(109, 204, 141, 0.15);
+    color: var(--cream);
     transition: all 0.3s ease;
+    font-family: var(--font-main);
 }
-
+.glass-input::placeholder { color: rgba(236, 243, 214, 0.35); }
 .glass-input:focus {
-    background: rgba(255, 255, 255, 0.08);
-    border-color: rgba(52, 211, 153, 0.4); /* emerald-400 */
+    background: rgba(109, 204, 141, 0.08);
+    border-color: rgba(109, 204, 141, 0.45);
     outline: none;
-    box-shadow: 0 0 10px 0 rgba(52, 211, 153, 0.1);
+    box-shadow: 0 0 12px 0 rgba(109, 204, 141, 0.15);
 }
 
-/* 3. Global Select Dropdown Option styles override */
+/* ═══════════════════════════════════════════════════════════
+   3. Select Dropdown Override
+   ═══════════════════════════════════════════════════════════ */
 select option {
-    background-color: #090d16 !important; /* Dark blue-slate background matching slate-950 theme */
-    color: #cbd5e1 !important; /* light grey slate-300 text */
+    background-color: #0e2e38 !important;
+    color: var(--cream) !important;
 }
 
-/* 4. Tab Active Navigation styles */
-.tab-btn {
-    position: relative;
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.tab-btn:hover {
-    transform: translateX(4px);
-}
-
+/* ═══════════════════════════════════════════════════════════
+   4. Sidebar Tab Navigation
+   ═══════════════════════════════════════════════════════════ */
+.tab-btn { position: relative; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
+.tab-btn:hover { transform: translateX(4px); }
 .tab-btn.active {
-    background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(16, 185, 129, 0.02)) !important;
-    border-color: rgba(16, 185, 129, 0.15) !important;
-    color: #ffffff !important;
-    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.05);
+    background: linear-gradient(135deg, rgba(109, 204, 141, 0.12), rgba(109, 204, 141, 0.03)) !important;
+    border-color: rgba(109, 204, 141, 0.2) !important;
+    color: var(--cream) !important;
+    box-shadow: 0 4px 12px rgba(109, 204, 141, 0.08);
 }
-
 .tab-btn.active::before {
     content: '';
     position: absolute;
-    left: 0;
-    top: 25%;
-    height: 50%;
-    width: 3.5px;
-    background: #10b981; /* emerald-500 */
+    left: 0; top: 25%;
+    height: 50%; width: 3.5px;
+    background: var(--green-fresh);
     border-radius: 0 4px 4px 0;
-    box-shadow: 0 0 8px #10b981;
+    box-shadow: 0 0 8px var(--green-fresh);
 }
 
-/* 5. Additional morphing blobs & animations */
-@keyframes morph-blob-3 {
-    0%, 100% {
-        border-radius: 50% 50% 30% 70% / 50% 60% 40% 50%;
-        transform: translate(0, 0) scale(1);
-    }
-    50% {
-        border-radius: 70% 30% 52% 48% / 60% 40% 60% 40%;
-        transform: translate(80px, -120px) scale(1.1);
-    }
-}
-
-.animate-blob-3 {
-    animation: morph-blob-3 22s infinite alternate ease-in-out;
-}
-
-/* 6. Specular light streak card animation */
+/* ═══════════════════════════════════════════════════════════
+   5. Specular Highlight Card
+   ═══════════════════════════════════════════════════════════ */
 .glass-highlight::after {
     content: '';
     position: absolute;
-    top: 0;
-    left: -150%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(
-        90deg,
-        transparent,
-        rgba(255, 255, 255, 0.15),
-        transparent
-    );
+    top: 0; left: -150%;
+    width: 100%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(167, 235, 243, 0.1), transparent);
     transform: skewX(-25deg);
     transition: 0.75s;
 }
+.glass-highlight:hover::after { left: 150%; }
 
-.glass-highlight:hover::after {
-    left: 150%;
+/* ═══════════════════════════════════════════════════════════
+   6. Brand Gradient Utilities
+   ═══════════════════════════════════════════════════════════ */
+.brand-gradient { background: linear-gradient(135deg, var(--green-fresh), var(--teal-mid)); }
+.brand-text-gradient {
+    background: linear-gradient(135deg, var(--green-fresh), var(--cyan-light));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
+
+/* ═══════════════════════════════════════════════════════════
+   7. Scrollbar
+   ═══════════════════════════════════════════════════════════ */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(109, 204, 141, 0.25); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(109, 204, 141, 0.45); }
+
+/* ═══════════════════════════════════════════════════════════
+   8. Brand override — remap Tailwind emerald/blue to brand palette
+   (Coordinator pages still use old Tailwind classes; override here)
+   ═══════════════════════════════════════════════════════════ */
+
+/* Gradient buttons (from-emerald-400 to-blue-500) → brand gradient */
+[class*="from-emerald-400"][class*="to-blue-5"] {
+    background: linear-gradient(135deg, #6dcc8d, #41aebd) !important;
+    color: #0e2e38 !important;
+}
+[class*="from-emerald-400"][class*="to-blue-4"] {
+    background: linear-gradient(135deg, #6dcc8d, #41aebd) !important;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+/* Solid emerald backgrounds → brand green tint */
+[class*="bg-emerald-500\/10"] { background: rgba(109, 204, 141, 0.08) !important; }
+[class*="bg-emerald-500\/20"] { background: rgba(109, 204, 141, 0.14) !important; }
+/* Emerald text → brand green */
+[class*="text-emerald-4"] { color: #6dcc8d !important; }
+/* Blue text → brand teal */
+[class*="text-blue-4"] { color: #41aebd !important; }
+/* Modal overlay bg-slate-950 → brand navy */
+[class*="bg-slate-950\/60"] { background: rgba(14, 46, 56, 0.75) !important; }
+[class*="bg-slate-950\/40"] { background: rgba(14, 46, 56, 0.5) !important; }
+/* Emerald borders → brand green border */
+[class*="border-emerald-5"] { border-color: rgba(109, 204, 141, 0.25) !important; }
+/* from-blue-5 to-indigo-5 avatar/icon gradient → brand teal */
+[class*="from-blue-5"][class*="to-indigo-5"] {
+    background: linear-gradient(135deg, #41aebd, #3e6d6c) !important;
+}
+/* Hello greeting text gradient override (coordinator index) */
+[class*="from-emerald-400"][class*="to-blue-400"] {
+    background: linear-gradient(135deg, #6dcc8d, #a7ebf3) !important;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
 

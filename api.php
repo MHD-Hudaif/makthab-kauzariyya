@@ -1,12 +1,17 @@
 <?php
 header('Content-Type: application/json; charset=utf-8');
-header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
-header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With');
 
 // Handle preflight OPTIONS request
 if (($_SERVER['REQUEST_METHOD'] ?? '') === 'OPTIONS') {
     http_response_code(200);
+    exit;
+}
+
+// ── Auth Guard ────────────────────────────────────────────────────────────────
+session_start();
+if (empty($_SESSION['user']) || !in_array($_SESSION['user']['role'], ['coordinator', 'admin'])) {
+    http_response_code(401);
+    echo json_encode(['status' => 'error', 'message' => 'Unauthorized. Please log in.']);
     exit;
 }
 

@@ -3,3 +3,4 @@ error_log
 .htaccess.nfd-backup
 Thumbs.db
 .DS_Store
+.env
