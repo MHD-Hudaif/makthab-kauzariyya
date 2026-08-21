@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS `students` (
   `user_id` int UNSIGNED NOT NULL,
   `admission_no` varchar(50) DEFAULT NULL UNIQUE,
   `parent_name` varchar(200) DEFAULT NULL,
-  `class_name` varchar(50) DEFAULT NULL,
+  `class_id` int UNSIGNED DEFAULT NULL,
   `dob` date DEFAULT NULL,
   CONSTRAINT `fk_students_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
