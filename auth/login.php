@@ -151,7 +151,7 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
                 <!-- Google Identity Services (GSI) 1-Click Sign-In -->
                 <div class="flex justify-center w-full">
                     <div id="g_id_onload"
-                        data-client_id="<?= htmlspecialchars(env('GOOGLE_CLIENT_ID', '66449910271-dqfua3m4hgcnoccunnjbf0qa4upmvni9.apps.googleusercontent.com')) ?>"
+                        data-client_id="<?= htmlspecialchars(env('GOOGLE_CLIENT_ID', '978330457998-m4htfrb34sge1nr2fu2v6p0ncjicap58.apps.googleusercontent.com')) ?>"
                         data-login_uri="<?= htmlspecialchars(base_url('auth/google.php')) ?>"
                         data-auto_prompt="false">
                     </div>
