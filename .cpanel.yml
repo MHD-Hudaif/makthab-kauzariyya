@@ -3,3 +3,4 @@ deployment:
   tasks:
     - export DEPLOYPATH=/home1/ensplpmy/public_html/makthab-kauzariyya-com
     - /bin/rsync -avz --exclude '.git*' --exclude '.cpanel.yml' --exclude 'error_log' * $DEPLOYPATH
+    - rm -f $DEPLOYPATH/index.html
