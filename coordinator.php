@@ -11,7 +11,8 @@ if (empty($_SESSION['user']) || !in_array($_SESSION['user']['role'], ['coordinat
 $currentUser = $_SESSION['user'];
 $successMessage = '';
 $errorMessage = '';
-$activeTab = $_GET['tab'] ?? 'overview';
+$activeTab = $_GET['tab'] ?? $_SESSION['active_tab'] ?? 'overview';
+$_SESSION['active_tab'] = $activeTab;
 
 // --- POST SUBMISSIONS (CRUD Handlers) ---
 if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
@@ -1185,7 +1186,7 @@ foreach ($classes as $class) {
         // Check URL tab parameter on page load
         window.addEventListener('DOMContentLoaded', () => {
             const params = new URLSearchParams(window.location.search);
-            const tab = params.get('tab') || 'overview';
+            const tab = params.get('tab') || '<?= $activeTab ?>';
             switchTab(tab);
         });
 
@@ -1223,6 +1224,11 @@ foreach ($classes as $class) {
             });
             // Show selected tab content
             document.getElementById('tab-' + tabId).classList.remove('hidden');
+
+            // Update URL tab parameter silently
+            const url = new URL(window.location);
+            url.searchParams.set('tab', tabId);
+            window.history.replaceState({}, '', url);
 
             // Deactivate all tab buttons
             document.querySelectorAll('.tab-btn').forEach(function(btn) {
