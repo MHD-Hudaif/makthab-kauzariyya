@@ -11,6 +11,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `status` enum('active', 'inactive', 'suspended') DEFAULT 'active',
   `profile_photo` varchar(255) DEFAULT NULL,
   `google_id` varchar(255) DEFAULT NULL UNIQUE,
+  `last_login` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `deleted_at` datetime DEFAULT NULL
