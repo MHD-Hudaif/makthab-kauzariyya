@@ -53,11 +53,34 @@ $totalCourses = $pdo->query("SELECT COUNT(*) FROM courses")->fetchColumn();
                 <a href="#socials" class="text-sm font-medium text-slate-300 hover:text-white transition">Socials</a>
             </div>
 
-            <div class="flex items-center gap-4">
+            <!-- Desktop Action Buttons -->
+            <div class="hidden md:flex items-center gap-4">
                 <a href="https://www.instagram.com/kauzariyya/" target="_blank" class="w-10 h-10 rounded-full glass-card flex items-center justify-center hover:text-pink-400 transition" title="Follow us on Instagram">
                     <i class="fa-brands fa-instagram text-lg"></i>
                 </a>
                 <a href="#contact" class="bg-gradient-to-r from-emerald-400 to-blue-500 text-slate-950 px-5 py-2 rounded-full font-semibold hover:shadow-lg hover:shadow-emerald-400/20 transition duration-300">
+                    Admission
+                </a>
+            </div>
+
+            <!-- Mobile Hamburger Toggle Trigger -->
+            <button onclick="toggleMobileMenu()" class="flex md:hidden w-10 h-10 items-center justify-center rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 transition" title="Toggle Navigation Menu">
+                <i id="hamburger-icon" class="fa-solid fa-bars text-white text-lg"></i>
+            </button>
+        </div>
+
+        <!-- Mobile Responsive Dropdown Navigation Menu -->
+        <div id="mobile-menu" class="hidden md:hidden border-t border-white/10 bg-slate-950/95 backdrop-blur-md transition-all duration-300 w-full px-6 py-4 space-y-3">
+            <a href="#home" onclick="toggleMobileMenu()" class="block text-sm font-medium text-slate-300 hover:text-white py-2 transition">Home</a>
+            <a href="coordinator.php" onclick="toggleMobileMenu()" class="block text-sm font-semibold text-slate-300 hover:text-emerald-400 py-2 transition"><i class="fa-solid fa-chart-pie mr-1 text-[11px]"></i>Panel</a>
+            <a href="#about" onclick="toggleMobileMenu()" class="block text-sm font-medium text-slate-300 hover:text-white py-2 transition">About</a>
+            <a href="#courses" onclick="toggleMobileMenu()" class="block text-sm font-medium text-slate-300 hover:text-white py-2 transition">Courses</a>
+            <a href="#socials" onclick="toggleMobileMenu()" class="block text-sm font-medium text-slate-300 hover:text-white py-2 transition">Socials</a>
+            <div class="pt-3 border-t border-white/10 flex gap-4">
+                <a href="https://www.instagram.com/kauzariyya/" target="_blank" class="w-10 h-10 rounded-full glass-card flex items-center justify-center hover:text-pink-400 transition" title="Follow us on Instagram">
+                    <i class="fa-brands fa-instagram text-lg"></i>
+                </a>
+                <a href="#contact" onclick="toggleMobileMenu()" class="bg-gradient-to-r from-emerald-400 to-blue-500 text-slate-950 px-5 py-2.5 rounded-full font-semibold hover:shadow-lg hover:shadow-emerald-400/20 transition duration-300 text-center flex-1">
                     Admission
                 </a>
             </div>
@@ -271,6 +294,23 @@ $totalCourses = $pdo->query("SELECT COUNT(*) FROM courses")->fetchColumn();
             <p>&copy; 2026 Al Jamiathul Kauzariyya. All rights reserved.</p>
         </div>
     </footer>
+    <!-- Mobile Navigation Toggle Script -->
+    <script>
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            const icon = document.getElementById('hamburger-icon');
+            
+            if (menu.classList.contains('hidden')) {
+                menu.classList.remove('hidden');
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-xmark');
+            } else {
+                menu.classList.add('hidden');
+                icon.classList.remove('fa-xmark');
+                icon.classList.add('fa-bars');
+            }
+        }
+    </script>
 
 </body>
 </html>
