@@ -87,13 +87,23 @@ try {
             
             // Seed role-specific profiles
             if ($user[4] === 'student') {
-                $studentStmt = $pdo->prepare("INSERT INTO `students` (user_id, admission_no, parent_name, class_name, dob) VALUES (?, ?, ?, ?, ?)");
-                $studentStmt->execute([$userId, 'ADM-2026-001', 'John Doe Sr.', 'Class 5', '2015-05-15']);
+                $studentStmt = $pdo->prepare("INSERT INTO `students` (user_id, admission_no, parent_name, class_id, dob) VALUES (?, ?, ?, ?, ?)");
+                $studentStmt->execute([$userId, 'ADM-2026-001', 'John Doe Sr.', null, '2015-05-15']);
             } elseif ($user[4] === 'teacher') {
                 $teacherStmt = $pdo->prepare("INSERT INTO `teachers` (user_id, specialisation, date_of_joining) VALUES (?, ?, ?)");
                 $teacherStmt->execute([$userId, 'Quran Recitation & Tajweed', '2020-06-01']);
             }
         }
+    }
+}
+
+// Auto-migrate coordinator schema if not exists
+try {
+    $pdo->query("SELECT 1 FROM `courses` LIMIT 1");
+} catch (PDOException $e) {
+    if ($e->getCode() == '42S02' || strpos($e->getMessage(), "doesn't exist") !== false) {
+        $sql = file_get_contents(__DIR__ . '/install_coordinator.sql');
+        $pdo->exec($sql);
     }
 }
 

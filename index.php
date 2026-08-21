@@ -121,6 +121,7 @@ require_once 'db.php';
             
             <div class="hidden md:flex items-center gap-8">
                 <a href="#home" class="text-sm font-medium text-slate-300 hover:text-white transition">Home</a>
+                <a href="coordinator.php" class="text-sm font-semibold text-slate-300 hover:text-emerald-400 transition"><i class="fa-solid fa-chart-pie mr-1 text-[11px]"></i>Panel</a>
                 <a href="#about" class="text-sm font-medium text-slate-300 hover:text-white transition">About</a>
                 <a href="#courses" class="text-sm font-medium text-slate-300 hover:text-white transition">Courses</a>
                 <a href="#socials" class="text-sm font-medium text-slate-300 hover:text-white transition">Socials</a>
