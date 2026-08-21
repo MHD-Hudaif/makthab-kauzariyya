@@ -207,6 +207,33 @@ try {
     } catch (PDOException $ex) {}
 }
 
+// Enforce Foreign Key connection between students/teachers and users
+try {
+    // 1. Delete orphan records to avoid integrity constraint failures
+    $pdo->exec("DELETE FROM `students` WHERE `user_id` NOT IN (SELECT `id` FROM `users`)");
+    $pdo->exec("DELETE FROM `teachers` WHERE `user_id` NOT IN (SELECT `id` FROM `users`)");
+
+    // 2. Add foreign key for students
+    try {
+        $pdo->exec("
+            ALTER TABLE `students`
+            ADD CONSTRAINT `fk_students_user`
+            FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
+            ON DELETE CASCADE
+        ");
+    } catch (PDOException $ex) {}
+
+    // 3. Add foreign key for teachers
+    try {
+        $pdo->exec("
+            ALTER TABLE `teachers`
+            ADD CONSTRAINT `fk_teachers_user`
+            FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
+            ON DELETE CASCADE
+        ");
+    } catch (PDOException $ex) {}
+} catch (PDOException $e) {}
+
 // Coordinator / academic tables
 try {
     $pdo->query("SELECT 1 FROM `courses` LIMIT 1");
