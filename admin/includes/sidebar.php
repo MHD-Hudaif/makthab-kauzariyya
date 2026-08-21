@@ -34,6 +34,9 @@ $currentPage = basename($_SERVER['PHP_SELF']);
                 <!-- Group 2: Administration -->
                 <div class="space-y-1.5">
                     <span class="block px-4 text-[9px] font-bold uppercase tracking-widest" style="color:rgba(167,235,243,0.45);">Administration</span>
+                    <a href="users.php" class="tab-btn w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold transition border border-transparent <?= $currentPage === 'users.php' ? 'active' : '' ?>" style="color:rgba(236,243,214,0.7);">
+                        <i class="fa-solid fa-users w-4"></i> Users Manager
+                    </a>
                     <a href="coordinators.php" class="tab-btn w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold transition border border-transparent <?= $currentPage === 'coordinators.php' ? 'active' : '' ?>" style="color:rgba(236,243,214,0.7);">
                         <i class="fa-solid fa-user-gear w-4"></i> Coordinators
                     </a>

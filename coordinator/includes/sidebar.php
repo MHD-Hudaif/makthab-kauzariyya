@@ -42,6 +42,14 @@ $currentPage = basename($_SERVER['PHP_SELF']);
                 <!-- Group 3: Users & Directory -->
                 <div class="space-y-1.5">
                     <span class="block px-4 text-[9px] font-bold uppercase tracking-widest" style="color:rgba(167,235,243,0.45);">Directory</span>
+                    <a href="approvals" class="tab-btn w-full flex items-center justify-between px-4 py-2.5 rounded-xl text-xs font-semibold transition border border-transparent <?= $currentPage === 'approvals.php' ? 'active' : '' ?>" style="color:rgba(236,243,214,0.7);">
+                        <span class="flex items-center gap-3">
+                            <i class="fa-solid fa-user-check w-4"></i> Pending Approvals
+                        </span>
+                        <?php if (($pendingApprovalsCount ?? 0) > 0): ?>
+                            <span class="bg-rose-500 text-white font-bold text-[9px] px-2 py-0.5 rounded-full shadow-[0_0_8px_rgba(239,68,68,0.4)] animate-pulse"><?= $pendingApprovalsCount ?></span>
+                        <?php endif; ?>
+                    </a>
                     <a href="teachers" class="tab-btn w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold transition border border-transparent <?= $currentPage === 'teachers.php' ? 'active' : '' ?>" style="color:rgba(236,243,214,0.7);">
                         <i class="fa-solid fa-chalkboard-user w-4"></i> Teachers
                     </a>

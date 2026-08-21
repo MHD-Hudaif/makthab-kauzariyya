@@ -35,12 +35,17 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
         $error = 'Please enter both username and password.';
     } else {
         try {
-            $stmt = $pdo->prepare("SELECT * FROM users WHERE username = ? AND status = 'active'");
+            $stmt = $pdo->prepare("SELECT * FROM users WHERE username = ?");
             $stmt->execute([$username]);
             $user = $stmt->fetch();
 
             if ($user && password_verify($password, $user['password'])) {
-                session_regenerate_id(true);
+                if ($user['status'] === 'inactive') {
+                    $error = 'Your admission is pending review and activation by the Coordinator.';
+                } elseif ($user['status'] === 'suspended') {
+                    $error = 'Access Denied: Your account has been suspended.';
+                } else {
+                    session_regenerate_id(true);
 
                 // Check if user has multiple comma-separated roles
                 $roles = array_filter(array_map('trim', explode(',', $user['role'])));
@@ -126,6 +131,13 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
             <div class="bg-red-500/10 border border-red-500/30 text-red-400 p-3.5 rounded-xl text-xs flex items-center gap-2">
                 <i class="fa-solid fa-circle-exclamation text-base"></i>
                 <span><?= htmlspecialchars($error) ?></span>
+            </div>
+        <?php endif; ?>
+
+        <?php if (!empty($_SESSION['msg_success'])): ?>
+            <div class="bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 p-3.5 rounded-xl text-xs flex items-center gap-2">
+                <i class="fa-solid fa-circle-check text-base"></i>
+                <span><?= htmlspecialchars($_SESSION['msg_success']); unset($_SESSION['msg_success']); ?></span>
             </div>
         <?php endif; ?>
 

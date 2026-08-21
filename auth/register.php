@@ -67,10 +67,10 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
 
         $pdo->beginTransaction();
 
-        // 1. Insert into users
+        // 1. Insert into users as 'inactive' (pending coordinator approval)
         $stmtUser = $pdo->prepare("
             INSERT INTO users (username, email, phone, place, password, full_name, role, status, google_id, profile_photo) 
-            VALUES (?, ?, ?, ?, ?, ?, 'student', 'active', ?, ?)
+            VALUES (?, ?, ?, ?, ?, ?, 'student', 'inactive', ?, ?)
         ");
         $stmtUser->execute([$username, $email, $phone, $place, $passwordHash, $fullName, $googleId, $profilePhoto]);
         $userId = $pdo->lastInsertId();
@@ -88,18 +88,8 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
         // Clear Google pending session
         unset($_SESSION['google_pending_registration']);
 
-        // Log the user in
-        $_SESSION['user'] = [
-            'id'            => $userId,
-            'username'      => $username,
-            'full_name'     => $fullName,
-            'email'         => $email,
-            'role'          => 'student',
-            'profile_photo' => $profilePhoto,
-        ];
-
-        $_SESSION['msg_success'] = "Welcome to Maktab Kauzariyya, {$fullName}! Your account has been registered.";
-        header('Location: ' . base_url('student/'));
+        $_SESSION['msg_success'] = "Admission submitted! Your account is pending review and activation by the Coordinator.";
+        header('Location: ' . base_url('login'));
         exit;
 
     } catch (Exception $e) {

@@ -36,6 +36,8 @@ if ($currentPage === 'coordinators.php') {
     $pageTitle = 'Courses & Classes';
 } elseif ($currentPage === 'audits.php') {
     $pageTitle = 'Class Audits';
+} elseif ($currentPage === 'users.php') {
+    $pageTitle = 'Users Manager';
 }
 ?>
 <!DOCTYPE html>

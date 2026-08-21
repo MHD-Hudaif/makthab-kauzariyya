@@ -19,6 +19,7 @@ $totalTeachers = (int)$pdo->query("SELECT COUNT(*) FROM users WHERE role = 'teac
 $totalSupervisors = (int)$pdo->query("SELECT COUNT(*) FROM users WHERE role = 'supervisor'")->fetchColumn();
 $totalCourses = (int)$pdo->query("SELECT COUNT(*) FROM courses")->fetchColumn();
 $totalClasses = (int)$pdo->query("SELECT COUNT(*) FROM classes")->fetchColumn();
+$pendingApprovalsCount = (int)$pdo->query("SELECT COUNT(*) FROM users WHERE role = 'student' AND status = 'inactive'")->fetchColumn();
 
 // Detect active page to determine document title
 $currentPage = basename($_SERVER['PHP_SELF']);
@@ -31,6 +32,8 @@ if ($currentPage === 'courses.php') {
     $pageTitle = 'Supervisors Registry';
 } elseif ($currentPage === 'students.php') {
     $pageTitle = 'Student Directory';
+} elseif ($currentPage === 'approvals.php') {
+    $pageTitle = 'Admission Approvals';
 }
 ?>
 <!DOCTYPE html>

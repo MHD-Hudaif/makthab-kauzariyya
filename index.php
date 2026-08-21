@@ -56,8 +56,8 @@ $totalCourses = $pdo->query("SELECT COUNT(*) FROM courses")->fetchColumn();
                 <a href="https://www.instagram.com/kauzariyya/" target="_blank" class="w-10 h-10 rounded-full glass-card flex items-center justify-center transition" style="color:rgba(236,243,214,0.7);" title="Follow us on Instagram">
                     <i class="fa-brands fa-instagram text-lg"></i>
                 </a>
-                <a href="#contact" class="brand-gradient px-5 py-2 rounded-full font-semibold transition duration-300" style="color:#0e2e38; box-shadow:0 4px 16px rgba(109,204,141,0.2);">
-                    Admission
+                <a href="register" class="brand-gradient px-5 py-2 rounded-full font-semibold transition duration-300" style="color:#0e2e38; box-shadow:0 4px 16px rgba(109,204,141,0.2);">
+                    Admission Open
                 </a>
             </div>
 
@@ -78,8 +78,8 @@ $totalCourses = $pdo->query("SELECT COUNT(*) FROM courses")->fetchColumn();
                 <a href="https://www.instagram.com/kauzariyya/" target="_blank" class="w-10 h-10 rounded-full glass-card flex items-center justify-center transition" title="Follow us on Instagram">
                     <i class="fa-brands fa-instagram text-lg"></i>
                 </a>
-                <a href="#contact" onclick="toggleMobileMenu()" class="brand-gradient px-5 py-2.5 rounded-full font-semibold transition duration-300 text-center flex-1" style="color:#0e2e38;">
-                    Admission
+                <a href="register" onclick="toggleMobileMenu()" class="brand-gradient px-5 py-2.5 rounded-full font-semibold transition duration-300 text-center flex-1" style="color:#0e2e38;">
+                    Admission Open
                 </a>
             </div>
         </div>
@@ -108,11 +108,11 @@ $totalCourses = $pdo->query("SELECT COUNT(*) FROM courses")->fetchColumn();
                 </p>
 
                 <div class="pt-4 flex flex-col sm:flex-row justify-center gap-4">
-                    <a href="#courses" class="glass-highlight relative overflow-hidden brand-gradient px-8 py-4 rounded-xl font-bold transition" style="color:#0e2e38; box-shadow:0 8px 24px rgba(109,204,141,0.2);">
-                        Explore Our Courses
+                    <a href="register" class="glass-highlight relative overflow-hidden brand-gradient px-8 py-4 rounded-xl font-bold transition" style="color:#0e2e38; box-shadow:0 8px 24px rgba(109,204,141,0.2);">
+                        Student Admission
                     </a>
-                    <a href="https://www.instagram.com/reel/DYVA7pMjBm9/" target="_blank" class="glass-card flex items-center justify-center gap-2 px-8 py-4 rounded-xl font-bold transition" style="color:#ecf3d6;">
-                        <i class="fa-solid fa-play" style="color:#6dcc8d;"></i> Watch Our Introduction
+                    <a href="#courses" class="glass-card flex items-center justify-center gap-2 px-8 py-4 rounded-xl font-bold transition border border-white/10 hover:border-white/20" style="color:#ecf3d6;">
+                        Explore Our Courses
                     </a>
                 </div>
             </div>
