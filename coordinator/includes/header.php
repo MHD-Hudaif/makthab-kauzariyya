@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once __DIR__ . '/../../db.php';
+require_once __DIR__ . '/../../includes/db.php';
 
 // Authentication Check: Only allow coordinators and admins
 if (empty($_SESSION['user']) || !in_array($_SESSION['user']['role'], ['coordinator', 'admin'])) {
@@ -43,7 +43,7 @@ if ($currentPage === 'courses.php') {
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/style.css?v=20260821-icons">
 </head>
 <body class="relative min-h-screen text-slate-100 overflow-x-hidden flex flex-col md:flex-row" style="background-color:#0e2e38; color:#ecf3d6;">
 

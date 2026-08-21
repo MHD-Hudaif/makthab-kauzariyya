@@ -112,7 +112,7 @@ require_once __DIR__ . '/includes/sidebar.php';
                         </div>
                         <div>
                             <h3 class="text-lg font-bold text-white"><?= htmlspecialchars($supervisor['supervisor_name']) ?></h3>
-                            <p class="text-xs text-slate-400">@<?= htmlspecialchars($supervisor['supervisor_username']) ?> · <?= htmlspecialchars($supervisor['supervisor_email'] ?? 'No Email') ?></p>
+                            <p class="text-xs text-slate-400 font-mono">@<?= htmlspecialchars($supervisor['supervisor_username']) ?></p>
                         </div>
                     </div>
                     <div class="flex items-center gap-2">
@@ -123,22 +123,28 @@ require_once __DIR__ . '/includes/sidebar.php';
                             'email' => $supervisor['supervisor_email'],
                             'phone' => $supervisor['supervisor_phone']
                         ])) ?>)" class="p-1.5 text-xs bg-white/5 hover:bg-white/10 text-slate-300 rounded border border-white/8 transition" title="Edit Supervisor">
-                            <i class="fa-solid fa-user-pen"></i>
+                            <i class="fa-solid fa-pen-to-square"></i>
                         </button>
                         <button onclick="confirmDelete('supervisor', <?= $supervisor['supervisor_id'] ?>)" class="p-1.5 text-xs bg-red-500/5 hover:bg-red-500/15 text-red-400 rounded border border-red-500/10 transition" title="Delete Supervisor">
-                            <i class="fa-solid fa-user-xmark"></i>
+                            <i class="fa-solid fa-trash"></i>
                         </button>
                     </div>
                 </div>
 
                 <div class="space-y-3 text-xs">
-                    <div class="flex justify-between">
-                        <span class="text-slate-400 font-semibold uppercase tracking-wider text-[9px]">Phone:</span>
-                        <span class="text-slate-200"><?= htmlspecialchars($supervisor['supervisor_phone'] ?? 'N/A') ?></span>
+                    <div class="space-y-1.5">
+                        <div class="flex items-center gap-2 text-slate-350">
+                            <i class="fa-regular fa-envelope w-4 text-[11px] opacity-70"></i>
+                            <span><?= htmlspecialchars($supervisor['supervisor_email'] ?? 'No Gmail') ?></span>
+                        </div>
+                        <div class="flex items-center gap-2 text-slate-350">
+                            <i class="fa-solid fa-mobile-screen w-4 text-[11px] opacity-70"></i>
+                            <span><?= htmlspecialchars($supervisor['supervisor_phone'] ?? 'No Mobile') ?></span>
+                        </div>
                     </div>
 
                     <!-- Classes Supervised -->
-                    <div class="pt-2">
+                    <div class="pt-2 border-t border-white/5">
                         <span class="block text-[9px] text-slate-400 font-semibold uppercase tracking-wider mb-2">Overseen Classes</span>
                         <div class="flex flex-wrap gap-2">
                             <?php 

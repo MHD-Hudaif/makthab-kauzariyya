@@ -1,5 +1,5 @@
 <?php
-require_once 'db.php';
+require_once 'includes/db.php';
 
 $totalStudents = $pdo->query("SELECT COUNT(*) FROM users WHERE role = 'student'")->fetchColumn();
 $totalTeachers = $pdo->query("SELECT COUNT(*) FROM users WHERE role = 'teacher'")->fetchColumn();
@@ -16,9 +16,9 @@ $totalCourses = $pdo->query("SELECT COUNT(*) FROM courses")->fetchColumn();
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/style.css?v=20260821-footer">
 </head>
-<body class="relative min-h-screen overflow-x-hidden" style="background-color:#0e2e38; color:#ecf3d6;">
+<body class="home-page relative min-h-screen overflow-x-hidden" style="color:#ecf3d6;">
 
     <!-- Background Color Layer -->
     <div class="fixed inset-0 z-[-3]" style="background: linear-gradient(135deg, #0e2e38 0%, #123b47 50%, #0e2e38 100%);"></div>
@@ -35,7 +35,7 @@ $totalCourses = $pdo->query("SELECT COUNT(*) FROM courses")->fetchColumn();
         <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
             <div class="flex items-center gap-3">
                 <div class="w-10 h-10 rounded-full overflow-hidden border flex items-center justify-center p-1" style="background:#123b47; border-color:rgba(109,204,141,0.25); box-shadow:0 0 12px rgba(109,204,141,0.1);">
-                    <img src="https://kauzariyya.com/wp-content/uploads/2024/01/Kauzariyya-Old-Curve.png" alt="Maktab Kauzariyya Logo" class="w-full h-full object-contain">
+                    <img src="assets/images/logo-mark-dark.png" alt="Maktab Kauzariyya Logo" class="w-full h-full object-contain">
                 </div>
                 <div class="flex flex-col">
                     <span class="text-lg font-bold tracking-wide uppercase brand-text-gradient">Maktab Kauzariyya</span>
@@ -89,7 +89,7 @@ $totalCourses = $pdo->query("SELECT COUNT(*) FROM courses")->fetchColumn();
     <main class="max-w-7xl mx-auto px-6 py-12 space-y-24">
 
         <!-- Hero Section inside a grand Liquid Glass Panel -->
-        <section id="home" class="relative glass-panel rounded-3xl p-8 md:p-16 overflow-hidden flex flex-col items-center text-center">
+        <section id="home" class="home-hero relative glass-panel rounded-3xl p-8 md:p-16 overflow-hidden grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr] gap-10 items-center">
             <!-- Glass gloss streak -->
             <div class="absolute inset-0 bg-gradient-to-tr from-transparent via-white/[0.02] to-transparent pointer-events-none"></div>
 
@@ -114,6 +114,20 @@ $totalCourses = $pdo->query("SELECT COUNT(*) FROM courses")->fetchColumn();
                     <a href="https://www.instagram.com/reel/DYVA7pMjBm9/" target="_blank" class="glass-card flex items-center justify-center gap-2 px-8 py-4 rounded-xl font-bold transition" style="color:#ecf3d6;">
                         <i class="fa-solid fa-play" style="color:#6dcc8d;"></i> Watch Our Introduction
                     </a>
+                </div>
+            </div>
+
+            <div class="relative z-10 hidden lg:flex justify-center items-center">
+                <div class="relative w-full max-w-sm aspect-[4/5] overflow-hidden rounded-[2rem] border border-white/15 shadow-2xl shadow-black/30">
+                    <img src="assets/images/hero-quran-student-clean.jpg" alt="Student studying the Quran" class="absolute inset-0 w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-[#09272e]/80 via-transparent to-transparent"></div>
+                    <div class="home-hero-mark absolute bottom-6 left-6 right-6 rounded-2xl p-4 flex items-center gap-3">
+                        <img src="assets/images/logo-dark.png" alt="Maktab Kauzariyya" class="w-12 h-12 object-contain">
+                        <div>
+                            <p class="text-xs uppercase tracking-[0.2em] font-bold" style="color:#0e2e38;">Maktab Kauzariyya</p>
+                            <p class="text-xs mt-1" style="color:#3e6d6c;">The Munazzam Path</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -254,7 +268,7 @@ $totalCourses = $pdo->query("SELECT COUNT(*) FROM courses")->fetchColumn();
                         
                         <!-- Simulated Image placeholder with Glass gradient -->
                         <div class="aspect-video w-full rounded-xl border flex items-center justify-center relative overflow-hidden group" style="background:linear-gradient(135deg,#123b47,#0e2e38); border-color:rgba(109,204,141,0.12);">
-                            <div class="absolute inset-0 bg-contain bg-no-repeat bg-center" style="background-image: url('https://kauzariyya.com/wp-content/uploads/2024/01/Kauzariyya-Old-Curve.png'); opacity: 0.7;"></div>
+                            <div class="absolute inset-0 bg-contain bg-no-repeat bg-center" style="background-image: url('assets/images/logo-mark-dark.png'); opacity: 0.7;"></div>
                             <a href="https://www.instagram.com/reel/DYVA7pMjBm9/" target="_blank" class="w-12 h-12 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center text-white border border-white/20 hover:scale-110 hover:bg-white/20 transition z-10">
                                 <i class="fa-solid fa-play text-xl translate-x-[2px]"></i>
                             </a>
@@ -276,20 +290,43 @@ $totalCourses = $pdo->query("SELECT COUNT(*) FROM courses")->fetchColumn();
     </main>
 
     <!-- Footer -->
-    <footer class="glass-navbar mt-24 py-12 px-6">
-        <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6 text-sm" style="color:rgba(167,235,243,0.5);">
-            <div class="flex items-center gap-3">
-                <div class="w-8 h-8 rounded-full overflow-hidden border flex items-center justify-center p-0.5" style="background:#123b47; border-color:rgba(109,204,141,0.2);">
-                    <img src="https://kauzariyya.com/wp-content/uploads/2024/01/Kauzariyya-Old-Curve.png" alt="Logo" class="w-full h-full object-contain">
+    <footer id="contact" class="site-footer glass-navbar mt-24 px-6 py-16 md:py-20">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-[1.15fr_1fr_0.75fr] gap-12 lg:gap-20">
+            <div class="space-y-6">
+                <div class="flex items-center gap-4">
+                    <div class="w-14 h-14 rounded-2xl overflow-hidden border flex items-center justify-center p-1.5" style="background:#123b47; border-color:rgba(109,204,141,0.25);">
+                        <img src="assets/images/logo-mark-dark.png" alt="Maktab Kauzariyya logo" class="w-full h-full object-contain">
+                    </div>
+                    <div>
+                        <p class="text-lg font-bold" style="color:#ecf3d6;">Maktab Kauzariyya</p>
+                        <p class="text-xs uppercase tracking-[0.16em]" style="color:rgba(167,235,243,0.55);">مكتب كوثرية</p>
+                    </div>
                 </div>
-                <span class="font-bold" style="color:#ecf3d6;">Maktab Kauzariyya &nbsp;·&nbsp; مكتب كوثرية</span>
+                <p class="max-w-md text-sm leading-7" style="color:rgba(236,243,214,0.6);">A Darul Uloom committed to nurturing sound Islamic scholarship, spiritual character, and service to humanity.</p>
+                <p class="text-xs" style="color:rgba(167,235,243,0.42);">&copy; 2026 Al Jamiathul Kauzariyya. All rights reserved.</p>
             </div>
-            <div class="flex gap-6">
-                <a href="https://www.instagram.com/kauzariyya/" target="_blank" class="transition hover:opacity-80"><i class="fa-brands fa-instagram text-lg"></i></a>
-                <a href="#" class="transition hover:opacity-80"><i class="fa-brands fa-facebook text-lg"></i></a>
-                <a href="#" class="transition hover:opacity-80"><i class="fa-brands fa-youtube text-lg"></i></a>
+
+            <div>
+                <h2 class="text-xl font-bold mb-6" style="color:#ecf3d6;">Links</h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4 text-sm">
+                    <a href="https://www.facebook.com/Kauzariyya" target="_blank" rel="noopener noreferrer" class="footer-link"><i class="fa-brands fa-facebook"></i><span>Facebook</span></a>
+                    <a href="https://www.instagram.com/kauzariyya/" target="_blank" rel="noopener noreferrer" class="footer-link"><i class="fa-brands fa-instagram"></i><span>Instagram</span></a>
+                    <a href="https://shopee.kauzariyya.com" target="_blank" rel="noopener noreferrer" class="footer-link"><i class="fa-solid fa-globe"></i><span>Kauzariyya Shopee</span></a>
+                    <a href="https://twitter.com/kauzariyya" target="_blank" rel="noopener noreferrer" class="footer-link"><i class="fa-brands fa-x-twitter"></i><span>Twitter</span></a>
+                    <a href="https://fatwa.kauzariyya.com" target="_blank" rel="noopener noreferrer" class="footer-link"><i class="fa-solid fa-globe"></i><span>Darul Ifta</span></a>
+                    <a href="https://www.youtube.com/c/AlJamiathulKauzariyya" target="_blank" rel="noopener noreferrer" class="footer-link"><i class="fa-brands fa-youtube"></i><span>Our YouTube Channel</span></a>
+                </div>
             </div>
-            <p>&copy; 2026 Al Jamiathul Kauzariyya. All rights reserved.</p>
+
+            <div>
+                <h2 class="text-xl font-bold mb-6" style="color:#ecf3d6;">More info</h2>
+                <div class="space-y-5 text-sm" style="color:rgba(236,243,214,0.62);">
+                    <a href="mailto:info@kauzariyya.com" class="footer-link"><i class="fa-regular fa-envelope"></i><span>View email address</span></a>
+                    <a href="https://www.youtube.com/@Kauzariyya" target="_blank" rel="noopener noreferrer" class="footer-link"><i class="fa-brands fa-youtube"></i><span>youtube.com/@Kauzariyya</span></a>
+                    <div class="footer-link"><i class="fa-solid fa-globe"></i><span>India</span></div>
+                    <div class="footer-link"><i class="fa-solid fa-circle-info"></i><span>Joined Jul 15, 2018</span></div>
+                </div>
+            </div>
         </div>
     </footer>
     <!-- Mobile Navigation Toggle Script -->

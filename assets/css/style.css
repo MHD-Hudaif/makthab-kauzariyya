@@ -143,7 +143,105 @@ select option {
 }
 
 /* ═══════════════════════════════════════════════════════════
-   7. Scrollbar
+   7. Branded page treatments
+   ═══════════════════════════════════════════════════════════ */
+.auth-page {
+    background:
+        linear-gradient(90deg, rgba(7, 28, 34, 0.88) 0%, rgba(7, 28, 34, 0.68) 48%, rgba(7, 28, 34, 0.46) 100%),
+        url('../images/auth-page-5.jpg') center / cover fixed;
+}
+.auth-card {
+    background: rgba(9, 39, 46, 0.82);
+    border-color: rgba(167, 235, 243, 0.2);
+    box-shadow: 0 24px 70px rgba(3, 18, 23, 0.5);
+}
+.home-page {
+    background:
+        radial-gradient(circle at 80% 8%, rgba(109, 204, 141, 0.12), transparent 28rem),
+        linear-gradient(135deg, var(--navy-deep), var(--navy) 52%, #0b3038);
+}
+.home-hero {
+    background:
+        linear-gradient(90deg, rgba(9, 39, 46, 0.98) 0%, rgba(9, 39, 46, 0.82) 50%, rgba(9, 39, 46, 0.18) 100%),
+        url('../images/brand-pattern-dark.png') right center / 560px,
+        var(--navy);
+    border-color: rgba(167, 235, 243, 0.16);
+}
+.home-hero-mark {
+    background: rgba(236, 243, 214, 0.94);
+    border: 8px solid rgba(109, 204, 141, 0.18);
+    box-shadow: 0 20px 45px rgba(3, 18, 23, 0.32);
+}
+.site-footer {
+    background:
+        linear-gradient(90deg, rgba(7, 28, 34, 0.96) 0%, rgba(7, 28, 34, 0.88) 52%, rgba(7, 28, 34, 0.68) 100%),
+        url('../images/footer-page-6.jpg') center / cover;
+    border-top: 1px solid rgba(167, 235, 243, 0.12);
+}
+.footer-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: rgba(236, 243, 214, 0.64);
+    transition: color 0.2s ease, transform 0.2s ease;
+}
+.footer-link i {
+    width: 1.25rem;
+    text-align: center;
+    color: var(--green-fresh);
+}
+.footer-link:hover {
+    color: var(--cream);
+    transform: translateX(3px);
+}
+
+/* Keep familiar symbols visible when the optional icon CDN is unavailable. */
+.fa-solid, .fa-brands, .fa-regular {
+    font-family: 'Segoe UI Symbol', sans-serif !important;
+    font-style: normal;
+}
+.fa-chart-pie::before { content: '◔' !important; }
+.fa-instagram::before { content: '◎' !important; }
+.fa-facebook::before { content: 'f' !important; }
+.fa-youtube::before { content: '▶' !important; }
+.fa-x-twitter::before { content: 'X' !important; }
+.fa-bars::before { content: '☰' !important; }
+.fa-xmark::before { content: '×' !important; }
+.fa-play::before { content: '▶' !important; }
+.fa-circle-play::before { content: '▶' !important; }
+.fa-user-graduate::before { content: '♙'; }
+.fa-chalkboard-user::before { content: '▣'; }
+.fa-book-open::before { content: '▤'; }
+.fa-user-tie::before { content: '♙'; }
+.fa-book-quran::before { content: '▥'; }
+.fa-mosque::before { content: '⌂'; }
+.fa-award::before { content: '✦'; }
+.fa-arrow-right::before { content: '→'; }
+.fa-arrow-left::before { content: '←'; }
+.fa-ellipsis::before { content: '⋯'; }
+.fa-heart::before { content: '♡'; }
+.fa-comment::before { content: '◌'; }
+.fa-paper-plane::before { content: '➤'; }
+.fa-bookmark::before { content: '▯'; }
+.fa-circle-exclamation::before { content: '!'; }
+.fa-circle-check::before { content: '✓'; }
+.fa-triangle-exclamation::before { content: '△'; }
+.fa-folder-plus::before, .fa-circle-plus::before, .fa-user-plus::before { content: '+'; }
+.fa-pen-to-square::before, .fa-user-pen::before { content: '✎'; }
+.fa-trash::before, .fa-user-xmark::before { content: '⌫'; }
+.fa-eye::before { content: '◉'; }
+.fa-right-from-bracket::before { content: '↪'; }
+.fa-graduation-cap::before { content: '⌒'; }
+.fa-school::before { content: '⌂'; }
+.fa-globe::before { content: '◎'; }
+.fa-circle-info::before { content: 'i'; }
+.fa-envelope::before { content: '@'; }
+.fa-phone::before, .fa-mobile-screen::before { content: '☎'; }
+.fa-user::before { content: '●'; }
+.fa-lock::before { content: '▣'; }
+
+/* ═══════════════════════════════════════════════════════════
+    8. Scrollbar
    ═══════════════════════════════════════════════════════════ */
 ::-webkit-scrollbar { width: 5px; height: 5px; }
 ::-webkit-scrollbar-track { background: transparent; }
@@ -151,7 +249,7 @@ select option {
 ::-webkit-scrollbar-thumb:hover { background: rgba(109, 204, 141, 0.45); }
 
 /* ═══════════════════════════════════════════════════════════
-   8. Brand override — remap Tailwind emerald/blue to brand palette
+    9. Brand override — remap Tailwind emerald/blue to brand palette
    (Coordinator pages still use old Tailwind classes; override here)
    ═══════════════════════════════════════════════════════════ */
 

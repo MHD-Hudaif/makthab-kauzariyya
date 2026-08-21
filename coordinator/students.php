@@ -142,8 +142,8 @@ require_once __DIR__ . '/includes/sidebar.php';
                             <td class="py-4 px-6 text-slate-300"><?= htmlspecialchars($student['parent_name'] ?? 'N/A') ?></td>
                             <td class="py-4 px-6 text-slate-300 text-xs"><?= htmlspecialchars($student['dob'] ?? 'N/A') ?></td>
                             <td class="py-4 px-6 text-xs text-slate-400 space-y-0.5">
-                                <div><i class="fa-regular fa-envelope text-[10px] mr-1"></i><?= htmlspecialchars($student['student_email'] ?? 'N/A') ?></div>
-                                <div><i class="fa-solid fa-phone text-[10px] mr-1"></i><?= htmlspecialchars($student['student_phone'] ?? 'N/A') ?></div>
+                                <div><i class="fa-regular fa-envelope mr-1.5 opacity-60"></i><?= htmlspecialchars($student['student_email'] ?? 'N/A') ?></div>
+                                <div><i class="fa-solid fa-mobile-screen mr-1.5 opacity-60"></i><?= htmlspecialchars($student['student_phone'] ?? 'N/A') ?></div>
                             </td>
                             <td class="py-4 px-6 text-right">
                                 <div class="flex items-center justify-end gap-2">
@@ -158,10 +158,10 @@ require_once __DIR__ . '/includes/sidebar.php';
                                         'dob' => $student['dob'],
                                         'class_id' => $student['class_id']
                                     ])) ?>)" class="p-1.5 text-xs bg-white/5 hover:bg-white/10 text-slate-300 rounded border border-white/8 transition" title="Edit Student">
-                                        <i class="fa-solid fa-user-pen"></i>
+                                        <i class="fa-solid fa-pen-to-square"></i>
                                     </button>
                                     <button onclick="confirmDelete('student', <?= $student['user_id'] ?>)" class="p-1.5 text-xs bg-red-500/5 hover:bg-red-500/15 text-red-400 rounded border border-red-500/10 transition" title="Delete Student">
-                                        <i class="fa-solid fa-user-xmark"></i>
+                                        <i class="fa-solid fa-trash"></i>
                                     </button>
                                 </div>
                             </td>

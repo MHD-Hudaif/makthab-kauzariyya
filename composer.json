@@ -1,0 +1,14 @@
+{
+    "name": "kauzariyya/makthab",
+    "description": "Makthab Kauzariyya Portal",
+    "type": "project",
+    "authors": [
+        {
+            "name": "MHD hudaif",
+            "email": "hudaifmhd0@gmail.com"
+        }
+    ],
+    "require": {
+        "vlucas/phpdotenv": "^5.6"
+    }
+}

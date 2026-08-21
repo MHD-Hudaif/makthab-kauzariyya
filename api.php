@@ -20,7 +20,7 @@ $jsonBody = !empty($rawInput) ? json_decode($rawInput, true) : [];
 $action = $_GET['action'] ?? $_POST['action'] ?? $_REQUEST['action'] ?? $jsonBody['action'] ?? '';
 
 try {
-    require_once __DIR__ . '/db.php';
+    require_once __DIR__ . '/includes/db.php';
 
     if ($action === 'get_data') {
         // 1. Fetch Stats

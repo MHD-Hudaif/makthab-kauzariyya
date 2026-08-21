@@ -190,17 +190,17 @@ require_once __DIR__ . '/includes/sidebar.php';
                             <div class="grid grid-cols-2 gap-4 text-xs pt-1 border-t border-white/5">
                                 <div>
                                     <span class="block text-[9px] text-slate-450 font-semibold uppercase tracking-wider">Supervisor</span>
-                                    <span class="text-slate-200 font-medium"><?= htmlspecialchars($class['supervisor_name'] ?? 'Not Assigned') ?></span>
+                                    <span class="text-slate-200 font-medium flex items-center gap-1.5 mt-0.5"><i class="fa-solid fa-user-tie text-[10px] opacity-70"></i><?= htmlspecialchars($class['supervisor_name'] ?? 'Not Assigned') ?></span>
                                 </div>
                                 <div>
                                     <span class="block text-[9px] text-slate-450 font-semibold uppercase tracking-wider">Enrolled Students</span>
-                                    <span class="text-slate-200 font-medium"><?= count($studentsByClass[$class['id']] ?? []) ?> Students</span>
+                                    <span class="text-slate-200 font-medium flex items-center gap-1.5 mt-0.5"><i class="fa-solid fa-user-graduate text-[10px] opacity-70"></i><?= count($studentsByClass[$class['id']] ?? []) ?> Students</span>
                                 </div>
                             </div>
 
                             <!-- Teachers Taught Many-to-Many -->
                             <div>
-                                <span class="block text-[9px] text-slate-450 font-semibold uppercase tracking-wider mb-1.5">Teachers</span>
+                                <span class="block text-[9px] text-slate-450 font-semibold uppercase tracking-wider mb-1.5 flex items-center gap-1"><i class="fa-solid fa-chalkboard-user text-[10px] opacity-70"></i>Teachers</span>
                                 <div class="flex flex-wrap gap-1.5">
                                     <?php 
                                     $classTeachers = $teachersByClass[$class['id']] ?? [];
@@ -219,7 +219,7 @@ require_once __DIR__ . '/includes/sidebar.php';
 
                             <!-- Students inside Class -->
                             <div>
-                                <span class="block text-[9px] text-slate-450 font-semibold uppercase tracking-wider mb-2">Student List</span>
+                                <span class="block text-[9px] text-slate-450 font-semibold uppercase tracking-wider mb-2 flex items-center gap-1"><i class="fa-solid fa-users text-[10px] opacity-70"></i>Student List</span>
                                 <div class="space-y-1.5 max-h-40 overflow-y-auto pr-1">
                                     <?php 
                                     $classStudents = $studentsByClass[$class['id']] ?? [];
