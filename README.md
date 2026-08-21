@@ -233,6 +233,6 @@ function db_all_where($pdo, $table, $conditions = []) {
 - [ ] **Audit Workspace**: A dashboard showing active classes. Supervisors can join Google Meet sessions and submit performance audit logs.
 - [ ] **Leave Approval System**: Panel to check, approve, or reschedule classes for teacher/student leaves.
 
-### Phase 5: Parent & Student Views (Pending)
-- [ ] **Parent Progress Tracker**: Simple dashboard showing their child's current lesson/Juz, test grades, and attendance cards.
-- [ ] **Milestone Timeline**: Visual card showing start and end dates for each completed Juz (following the reverse 30-26 sequence for Hifz).
+### Phase 5: Parent & Student Views (Done)
+- [x] **Parent Progress Tracker**: Simple dashboard showing their child's current lesson/Juz, test grades, and attendance cards.
+- [x] **Milestone Timeline**: Visual card showing start and end dates for each completed Juz (following the reverse 30-26 sequence for Hifz).
