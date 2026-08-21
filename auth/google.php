@@ -134,6 +134,14 @@ function authenticateUser(PDO $pdo, string $googleId, string $email, string $ful
             }
         }
 
+        // Check if user has multiple comma-separated roles
+        $roles = array_filter(array_map('trim', explode(',', $user['role'])));
+        if (count($roles) > 1) {
+            $_SESSION['temp_user_login'] = $user;
+            header('Location: ' . base_url('auth/role_select.php'));
+            exit;
+        }
+
         // Store user in session
         $_SESSION['user'] = [
             'id'            => $user['id'],

@@ -193,6 +193,11 @@ try {
     } catch (PDOException $ex) {}
 }
 
+// Ensure role column is varchar to support multiple comma-separated roles
+try {
+    $pdo->exec("ALTER TABLE `users` MODIFY COLUMN `role` varchar(150) NOT NULL");
+} catch (PDOException $e) {}
+
 // Ensure profile_photo column exists on users table
 try {
     $pdo->query("SELECT profile_photo FROM `users` LIMIT 1");

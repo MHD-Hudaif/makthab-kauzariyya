@@ -41,6 +41,15 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
 
             if ($user && password_verify($password, $user['password'])) {
                 session_regenerate_id(true);
+
+                // Check if user has multiple comma-separated roles
+                $roles = array_filter(array_map('trim', explode(',', $user['role'])));
+                if (count($roles) > 1) {
+                    $_SESSION['temp_user_login'] = $user;
+                    header('Location: ' . base_url('auth/role_select.php'));
+                    exit;
+                }
+
                 $_SESSION['user'] = [
                     'id'            => $user['id'],
                     'username'      => $user['username'],
