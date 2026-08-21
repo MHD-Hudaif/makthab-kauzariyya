@@ -4,4 +4,3 @@ error_log
 Thumbs.db
 .DS_Store
 .env
-vendor/
