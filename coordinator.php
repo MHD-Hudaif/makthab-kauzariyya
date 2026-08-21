@@ -363,7 +363,7 @@ foreach ($classes as $class) {
     </div>
 
     <!-- Sidebar Navigation -->
-    <aside class="w-full md:w-64 glass-panel border-r border-white/10 md:h-screen md:sticky md:top-0 flex flex-col justify-between p-6 z-40">
+    <aside class="w-full md:w-64 bg-[#0a0f1a]/70 border border-white/10 shadow-2xl md:fixed md:top-4 md:left-4 md:bottom-4 md:h-[calc(100vh-32px)] rounded-[22px] flex flex-col justify-between p-6 z-40 backdrop-blur-md">
         <div class="space-y-8">
             <!-- Branding Header -->
             <div class="flex items-center gap-3">
@@ -399,30 +399,31 @@ foreach ($classes as $class) {
         <!-- Sidebar Footer -->
         <div class="pt-6 border-t border-white/10 mt-6 space-y-4">
             <!-- User Badge -->
-            <div class="flex items-center gap-2.5 px-1">
-                <div class="w-8 h-8 rounded-full bg-slate-900 border border-white/15 flex items-center justify-center text-xs font-bold text-emerald-400">
-                    <?= strtoupper(substr($currentUser['full_name'], 0, 1)) ?>
+            <div class="flex items-center justify-between bg-white/[0.02] border border-white/5 p-3 rounded-xl">
+                <div class="flex items-center gap-2.5 min-w-0">
+                    <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-emerald-400 to-blue-500 flex items-center justify-center text-xs font-bold text-slate-950 flex-shrink-0 relative">
+                        <?= strtoupper(substr($currentUser['full_name'], 0, 1)) ?>
+                        <span class="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-emerald-400 border-2 border-[#0a0f1a]"></span>
+                    </div>
+                    <div class="flex flex-col min-w-0">
+                        <span class="text-xs font-bold text-white truncate"><?= htmlspecialchars($currentUser['full_name']) ?></span>
+                        <span class="text-[9px] text-slate-450 uppercase font-semibold tracking-wider"><?= htmlspecialchars($currentUser['role']) ?></span>
+                    </div>
                 </div>
-                <div class="flex flex-col min-w-0">
-                    <span class="text-xs font-bold text-white truncate"><?= htmlspecialchars($currentUser['full_name']) ?></span>
-                    <span class="text-[9px] text-slate-450 uppercase font-semibold tracking-wider"><?= htmlspecialchars($currentUser['role']) ?></span>
-                </div>
+                <a href="logout.php" class="w-8 h-8 rounded-lg bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/15 flex items-center justify-center transition flex-shrink-0" title="Logout">
+                    <i class="fa-solid fa-right-from-bracket text-xs"></i>
+                </a>
             </div>
 
-            <!-- Buttons Grid -->
-            <div class="grid grid-cols-2 gap-2">
-                <a href="index.php" class="flex items-center justify-center gap-1.5 py-2 px-3 rounded-lg bg-white/5 hover:bg-white/10 text-xs font-semibold text-slate-300 hover:text-white transition border border-white/8">
-                    <i class="fa-solid fa-arrow-left"></i> Home
-                </a>
-                <a href="logout.php" class="flex items-center justify-center gap-1.5 py-2 px-3 rounded-lg bg-red-500/10 hover:bg-red-500/20 text-xs font-semibold text-red-400 transition border border-red-500/15">
-                    <i class="fa-solid fa-right-from-bracket"></i> Logout
-                </a>
-            </div>
+            <!-- Home link -->
+            <a href="index.php" class="flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-lg bg-white/5 hover:bg-white/10 text-xs font-semibold text-slate-300 hover:text-white transition border border-white/8 w-full">
+                <i class="fa-solid fa-arrow-left"></i> Back to Homepage
+            </a>
         </div>
     </aside>
 
     <!-- Main Content Panel -->
-    <div class="flex-1 flex flex-col min-w-0">
+    <div class="flex-1 flex flex-col min-w-0 md:ml-72 md:pt-4 md:pr-4 md:pb-4">
         
         <!-- Header -->
         <header class="h-20 border-b border-white/10 flex items-center justify-between px-8 bg-slate-950/20 backdrop-blur-md sticky top-0 z-30">

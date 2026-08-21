@@ -87,10 +87,32 @@ select option {
 }
 
 /* 4. Tab Active Navigation styles */
+.tab-btn {
+    position: relative;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.tab-btn:hover {
+    transform: translateX(4px);
+}
+
 .tab-btn.active {
-    background: rgba(255, 255, 255, 0.12);
-    border-color: rgba(255, 255, 255, 0.2);
-    color: #34d399; /* emerald-400 */
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(16, 185, 129, 0.02)) !important;
+    border-color: rgba(16, 185, 129, 0.15) !important;
+    color: #ffffff !important;
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.05);
+}
+
+.tab-btn.active::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 25%;
+    height: 50%;
+    width: 3.5px;
+    background: #10b981; /* emerald-500 */
+    border-radius: 0 4px 4px 0;
+    box-shadow: 0 0 8px #10b981;
 }
 
 /* 5. Additional morphing blobs & animations */

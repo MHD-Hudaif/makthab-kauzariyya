@@ -1,5 +1,10 @@
 <?php
 require_once 'db.php';
+
+$totalStudents = $pdo->query("SELECT COUNT(*) FROM users WHERE role = 'student'")->fetchColumn();
+$totalTeachers = $pdo->query("SELECT COUNT(*) FROM users WHERE role = 'teacher'")->fetchColumn();
+$totalSupervisors = $pdo->query("SELECT COUNT(*) FROM users WHERE role = 'supervisor'")->fetchColumn();
+$totalCourses = $pdo->query("SELECT COUNT(*) FROM courses")->fetchColumn();
 ?>
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
@@ -100,7 +105,7 @@ require_once 'db.php';
                     <i class="fa-solid fa-user-graduate text-xl"></i>
                 </div>
                 <div class="space-y-1">
-                    <span class="block text-3xl md:text-4xl font-extrabold text-white">150+</span>
+                    <span class="block text-3xl md:text-4xl font-extrabold text-white"><?= $totalStudents ?>+</span>
                     <span class="block text-xs md:text-sm font-medium text-slate-400 uppercase tracking-wider">Students</span>
                 </div>
             </div>
@@ -111,7 +116,7 @@ require_once 'db.php';
                     <i class="fa-solid fa-chalkboard-user text-xl"></i>
                 </div>
                 <div class="space-y-1">
-                    <span class="block text-3xl md:text-4xl font-extrabold text-white">40+</span>
+                    <span class="block text-3xl md:text-4xl font-extrabold text-white"><?= $totalTeachers ?>+</span>
                     <span class="block text-xs md:text-sm font-medium text-slate-400 uppercase tracking-wider">Teachers</span>
                 </div>
             </div>
@@ -122,7 +127,7 @@ require_once 'db.php';
                     <i class="fa-solid fa-book-open text-xl"></i>
                 </div>
                 <div class="space-y-1">
-                    <span class="block text-3xl md:text-4xl font-extrabold text-white">5+</span>
+                    <span class="block text-3xl md:text-4xl font-extrabold text-white"><?= $totalCourses ?>+</span>
                     <span class="block text-xs md:text-sm font-medium text-slate-400 uppercase tracking-wider">Courses</span>
                 </div>
             </div>
@@ -133,7 +138,7 @@ require_once 'db.php';
                     <i class="fa-solid fa-user-tie text-xl"></i>
                 </div>
                 <div class="space-y-1">
-                    <span class="block text-3xl md:text-4xl font-extrabold text-white">15+</span>
+                    <span class="block text-3xl md:text-4xl font-extrabold text-white"><?= $totalSupervisors ?>+</span>
                     <span class="block text-xs md:text-sm font-medium text-slate-400 uppercase tracking-wider">Supervisors</span>
                 </div>
             </div>
