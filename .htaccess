@@ -12,6 +12,10 @@ RewriteEngine On
     </IfModule>
 </FilesMatch>
 
+# Redirect index.php or index to the directory root (/)
+RewriteCond %{THE_REQUEST} \s/+(.*?)/?index(\.php)?[\s?] [NC]
+RewriteRule ^ /%1/ [R=301,L]
+
 # Redirect /page.php to /page (external redirect)
 RewriteCond %{THE_REQUEST} \s/+(.+?)\.php[\s?] [NC]
 RewriteRule ^ /%1 [R=301,L]

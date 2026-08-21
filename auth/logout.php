@@ -9,6 +9,7 @@ if (ini_get("session.use_cookies")) {
         $params["secure"], $params["httponly"]
     );
 }
+require_once __DIR__ . '/../includes/db.php';
 session_destroy();
-header('Location: ../auth/login.php');
+header('Location: ' . base_url('login'));
 exit;

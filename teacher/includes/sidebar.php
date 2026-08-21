@@ -11,7 +11,7 @@ $currentPage = basename($_SERVER['PHP_SELF']);
                         <img src="https://kauzariyya.com/wp-content/uploads/2024/01/Kauzariyya-Old-Curve.png" alt="Logo" class="w-full h-full object-contain">
                     </div>
                     <div class="flex flex-col">
-                        <span class="text-sm font-bold tracking-wide uppercase brand-text-gradient">Coordinator</span>
+                        <span class="text-sm font-bold tracking-wide uppercase brand-text-gradient">Teacher Panel</span>
                         <span class="text-[9px] tracking-widest uppercase" style="color:rgba(167,235,243,0.5);">Al Jamiathul Kauzariyya</span>
                     </div>
                 </div>
@@ -21,7 +21,7 @@ $currentPage = basename($_SERVER['PHP_SELF']);
                 </button>
             </div>
 
-            <!-- Tab Menu (Grouped by Category) -->
+            <!-- Tab Menu -->
             <nav class="space-y-4 flex flex-col">
                 <!-- Group 1: General -->
                 <div class="space-y-1.5">
@@ -31,25 +31,14 @@ $currentPage = basename($_SERVER['PHP_SELF']);
                     </a>
                 </div>
 
-                <!-- Group 2: Curriculum -->
+                <!-- Group 2: Classroom & Tracking -->
                 <div class="space-y-1.5">
-                    <span class="block px-4 text-[9px] font-bold uppercase tracking-widest" style="color:rgba(167,235,243,0.45);">Curriculum</span>
-                    <a href="courses" class="tab-btn w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold transition border border-transparent <?= $currentPage === 'courses.php' ? 'active' : '' ?>" style="color:rgba(236,243,214,0.7);">
-                        <i class="fa-solid fa-graduation-cap w-4"></i> Courses & Classes
+                    <span class="block px-4 text-[9px] font-bold uppercase tracking-widest" style="color:rgba(167,235,243,0.45);">Classes</span>
+                    <a href="classroom.php" class="tab-btn w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold transition border border-transparent <?= $currentPage === 'classroom.php' ? 'active' : '' ?>" style="color:rgba(236,243,214,0.7);">
+                        <i class="fa-solid fa-chalkboard w-4"></i> Live Classroom
                     </a>
-                </div>
-
-                <!-- Group 3: Users & Directory -->
-                <div class="space-y-1.5">
-                    <span class="block px-4 text-[9px] font-bold uppercase tracking-widest" style="color:rgba(167,235,243,0.45);">Directory</span>
-                    <a href="teachers" class="tab-btn w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold transition border border-transparent <?= $currentPage === 'teachers.php' ? 'active' : '' ?>" style="color:rgba(236,243,214,0.7);">
-                        <i class="fa-solid fa-chalkboard-user w-4"></i> Teachers
-                    </a>
-                    <a href="supervisors" class="tab-btn w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold transition border border-transparent <?= $currentPage === 'supervisors.php' ? 'active' : '' ?>" style="color:rgba(236,243,214,0.7);">
-                        <i class="fa-solid fa-user-tie w-4"></i> Supervisors
-                    </a>
-                    <a href="students" class="tab-btn w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold transition border border-transparent <?= $currentPage === 'students.php' ? 'active' : '' ?>" style="color:rgba(236,243,214,0.7);">
-                        <i class="fa-solid fa-user-graduate w-4"></i> Students
+                    <a href="reports.php" class="tab-btn w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold transition border border-transparent <?= $currentPage === 'reports.php' ? 'active' : '' ?>" style="color:rgba(236,243,214,0.7);">
+                        <i class="fa-solid fa-file-invoice w-4"></i> Weekly Reports
                     </a>
                 </div>
             </nav>
@@ -89,7 +78,7 @@ $currentPage = basename($_SERVER['PHP_SELF']);
             <h2 id="current-tab-title" class="text-xl font-bold tracking-wide" style="color:#ecf3d6;"><?= htmlspecialchars($pageTitle) ?></h2>
             <div class="flex items-center gap-2 text-xs px-3.5 py-1.5 rounded-full border" style="color:rgba(167,235,243,0.6); background:rgba(109,204,141,0.05); border-color:rgba(109,204,141,0.15);">
                 <span class="w-2 h-2 rounded-full" style="background:#6dcc8d;"></span>
-                <span>Active Portal</span>
+                <span>Teacher Workspace</span>
             </div>
         </header>
 
@@ -98,14 +87,15 @@ $currentPage = basename($_SERVER['PHP_SELF']);
 
             <!-- Success / Error messages -->
             <?php if (!empty($successMessage)): ?>
-                <div class="border p-4 rounded-2xl text-sm flex items-center gap-2" style="background:rgba(109,204,141,0.08); border-color:rgba(109,204,141,0.2); color:#6dcc8d;">
-                    <i class="fa-solid fa-circle-check text-lg"></i>
-                    <span><?= htmlspecialchars($successMessage) ?></span>
+                <div class="flex items-center gap-3 p-4 rounded-xl border" style="background:rgba(109,204,141,0.08); border-color:rgba(109,204,141,0.25); color:#6dcc8d;">
+                    <i class="fa-solid fa-circle-check"></i>
+                    <span class="text-xs font-semibold"><?= htmlspecialchars($successMessage) ?></span>
                 </div>
             <?php endif; ?>
+
             <?php if (!empty($errorMessage)): ?>
-                <div class="border p-4 rounded-2xl text-sm flex items-center gap-2" style="background:rgba(220,38,38,0.08); border-color:rgba(220,38,38,0.2); color:#f87171;">
-                    <i class="fa-solid fa-circle-exclamation text-lg"></i>
-                    <span><?= htmlspecialchars($errorMessage) ?></span>
+                <div class="flex items-center gap-3 p-4 rounded-xl border" style="background:rgba(220,38,38,0.08); border-color:rgba(220,38,38,0.25); color:#f87171;">
+                    <i class="fa-solid fa-circle-exclamation"></i>
+                    <span class="text-xs font-semibold"><?= htmlspecialchars($errorMessage) ?></span>
                 </div>
             <?php endif; ?>

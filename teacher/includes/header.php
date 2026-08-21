@@ -2,8 +2,8 @@
 session_start();
 require_once __DIR__ . '/../../includes/db.php';
 
-// Authentication Check: Only allow coordinators and admins
-if (empty($_SESSION['user']) || !in_array($_SESSION['user']['role'], ['coordinator', 'admin'])) {
+// Authentication Check: Only allow teachers
+if (empty($_SESSION['user']) || $_SESSION['user']['role'] !== 'teacher') {
     header('Location: ' . base_url('login'));
     exit;
 }
@@ -13,24 +13,28 @@ $successMessage = $_SESSION['msg_success'] ?? '';
 $errorMessage = $_SESSION['msg_error'] ?? '';
 unset($_SESSION['msg_success'], $_SESSION['msg_error']);
 
-// Fetch common counts for sidebar/overview panels
-$totalStudents = (int)$pdo->query("SELECT COUNT(*) FROM users WHERE role = 'student'")->fetchColumn();
-$totalTeachers = (int)$pdo->query("SELECT COUNT(*) FROM users WHERE role = 'teacher'")->fetchColumn();
-$totalSupervisors = (int)$pdo->query("SELECT COUNT(*) FROM users WHERE role = 'supervisor'")->fetchColumn();
-$totalCourses = (int)$pdo->query("SELECT COUNT(*) FROM courses")->fetchColumn();
-$totalClasses = (int)$pdo->query("SELECT COUNT(*) FROM classes")->fetchColumn();
+// Fetch teacher specific details
+$teacherId = $currentUser['id'];
+
+// Get active classes taught by this teacher
+$stmt = $pdo->prepare("
+    SELECT c.*, co.name as course_name, co.code as course_code 
+    FROM classes c
+    JOIN class_teachers ct ON c.id = ct.class_id
+    JOIN courses co ON c.course_id = co.id
+    WHERE ct.teacher_id = ?
+    ORDER BY c.name ASC
+");
+$stmt->execute([$teacherId]);
+$teacherClasses = $stmt->fetchAll();
 
 // Detect active page to determine document title
 $currentPage = basename($_SERVER['PHP_SELF']);
-$pageTitle = 'Dashboard';
-if ($currentPage === 'courses.php') {
-    $pageTitle = 'Courses & Classes Tree';
-} elseif ($currentPage === 'teachers.php') {
-    $pageTitle = 'Teachers Registry';
-} elseif ($currentPage === 'supervisors.php') {
-    $pageTitle = 'Supervisors Registry';
-} elseif ($currentPage === 'students.php') {
-    $pageTitle = 'Student Directory';
+$pageTitle = 'Teacher Dashboard';
+if ($currentPage === 'classroom.php') {
+    $pageTitle = 'Live Classroom';
+} elseif ($currentPage === 'reports.php') {
+    $pageTitle = 'Weekly Reports';
 }
 ?>
 <!DOCTYPE html>
@@ -38,7 +42,7 @@ if ($currentPage === 'courses.php') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kauzariyya - <?= htmlspecialchars($pageTitle) ?></title>
+    <title>Kauzariyya Teacher - <?= htmlspecialchars($pageTitle) ?></title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -62,7 +66,7 @@ if ($currentPage === 'courses.php') {
             <div class="w-8 h-8 rounded-full overflow-hidden border flex items-center justify-center p-0.5" style="background:#123b47; border-color:rgba(109,204,141,0.2);">
                 <img src="https://kauzariyya.com/wp-content/uploads/2024/01/Kauzariyya-Old-Curve.png" alt="Logo" class="w-full h-full object-contain">
             </div>
-            <span class="text-sm font-bold tracking-wide uppercase brand-text-gradient">Coordinator</span>
+            <span class="text-sm font-bold tracking-wide uppercase brand-text-gradient">Teacher Panel</span>
         </div>
         <button onclick="toggleMobileSidebar(true)" class="w-10 h-10 flex items-center justify-center rounded-xl border transition" style="background:rgba(109,204,141,0.05); border-color:rgba(109,204,141,0.15);" title="Open Sidebar Menu">
             <i class="fa-solid fa-bars text-lg" style="color:#ecf3d6;"></i>
