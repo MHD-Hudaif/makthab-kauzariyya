@@ -2,31 +2,71 @@
 /**
  * db.php — Database Connection
  *
- * Loads credentials strictly from environment variables (either system env or .env file)
- * and initializes the global $pdo instance.
+ * Zero-dependency database connection matching the Musabaqa website setup.
+ * Loads variables from the root .env file and sets up the PDO connection.
  */
 
-if (!file_exists(__DIR__ . '/../vendor/autoload.php')) {
-    die("Error: The 'vendor' directory is missing. Since it is excluded by .gitignore, you must manually upload the 'vendor' folder to your server, or run 'composer install' via SSH on Bluehost.");
-}
-require_once __DIR__ . '/../vendor/autoload.php';
-
-use Dotenv\Dotenv;
-
-// Load .env variables into $_ENV and getenv() from the project root
-$dotenv = Dotenv::createImmutable(dirname(__DIR__));
-$dotenv->safeLoad();
-
-// Helper to get environment variables with fallback
-if (!function_exists('env_val')) {
-    function env_val(string $key, mixed $default = null): mixed {
-        $value = getenv($key) ?: ($_ENV[$key] ?? null);
-        if ($value === null || $value === '') {
-            return $default;
+// ── Zero-Dependency env() Loader (From Musabaqa env.php) ──────────────────────
+if (!function_exists('load_env_file')) {
+    function load_env_file(string $path): void {
+        if (!is_file($path) || !is_readable($path)) {
+            return;
         }
-        return $value;
+
+        $lines = file($path, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+        if ($lines === false) {
+            return;
+        }
+
+        foreach ($lines as $line) {
+            $line = trim($line);
+
+            if ($line === '' || str_starts_with($line, '#') || !str_contains($line, '=')) {
+                continue;
+            }
+
+            [$key, $value] = explode('=', $line, 2);
+            $key = trim($key);
+
+            if ($key === '') {
+                continue;
+            }
+
+            $value = trim($value);
+
+            if (
+                strlen($value) >= 2
+                && (($value[0] === '"' && $value[-1] === '"') || ($value[0] === "'" && $value[-1] === "'"))
+            ) {
+                $value = substr($value, 1, -1);
+            }
+
+            $_ENV[$key] = $value;
+            $_SERVER[$key] = $value;
+            putenv($key . '=' . $value);
+        }
     }
 }
+
+if (!function_exists('env')) {
+    function env(string $key, mixed $default = null): mixed {
+        $value = $_ENV[$key] ?? $_SERVER[$key] ?? getenv($key);
+
+        if ($value === false || $value === null || $value === '') {
+            return $default;
+        }
+
+        return match (strtolower((string)$value)) {
+            'true' => true,
+            'false' => false,
+            'null' => null,
+            default => $value,
+        };
+    }
+}
+
+// Load .env from the root folder
+load_env_file(dirname(__DIR__) . '/.env');
 
 // ── Environment Detection ────────────────────────────────────────────────────
 $isLocalhost = in_array($_SERVER['HTTP_HOST'] ?? '', ['localhost', '127.0.0.1'], true)
@@ -49,17 +89,16 @@ if ($isLocalhost) {
         fclose($fp);
     }
 
-    // Local default settings, configurable via local .env if desired
-    $DB_HOST = env_val('DB_HOST', "127.0.0.1;port={$localPort}");
-    $DB_NAME = env_val('DB_DATABASE', 'makthab_kauzariyya');
-    $DB_USER = env_val('DB_USERNAME', 'root');
-    $DB_PASS = env_val('DB_PASSWORD', '');
+    $DB_HOST = env('DB_HOST', "127.0.0.1;port={$localPort}");
+    $DB_NAME = env('DB_DATABASE', 'makthab_kauzariyya');
+    $DB_USER = env('DB_USERNAME', 'root');
+    $DB_PASS = env('DB_PASSWORD', ''); // Local default root password
 } else {
     // Bluehost Production Environment
-    $DB_HOST = env_val('DB_HOST', 'localhost');
-    $DB_NAME = env_val('DB_DATABASE', 'ensplpmy_makthab_kauzariyya');
-    $DB_USER = env_val('DB_USERNAME', 'ensplpmy_hudaif');
-    $DB_PASS = env_val('DB_PASSWORD', 'abd527-157');
+    $DB_HOST = env('DB_HOST', 'localhost');
+    $DB_NAME = env('DB_DATABASE', 'ensplpmy_makthab_kauzariyya');
+    $DB_USER = env('DB_USERNAME', 'ensplpmy_hudaif');
+    $DB_PASS = env('DB_PASSWORD', 'abd527-157');
 }
 
 // ── PDO Connection ───────────────────────────────────────────────────────────
