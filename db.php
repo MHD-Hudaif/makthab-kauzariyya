@@ -64,7 +64,7 @@ try {
 } catch (PDOException $e) {
     // Table 'users' doesn't exist (SQLSTATE 42S02)
     if ($e->getCode() == '42S02' || strpos($e->getMessage(), "doesn't exist") !== false) {
-        $sql = file_get_contents(__DIR__ . '/install_users.sql');
+        $sql = file_get_contents(__DIR__ . '/database/install_users.sql');
         $pdo->exec($sql);
 
         // Seed Default Users
@@ -102,7 +102,7 @@ try {
     $pdo->query("SELECT 1 FROM `courses` LIMIT 1");
 } catch (PDOException $e) {
     if ($e->getCode() == '42S02' || strpos($e->getMessage(), "doesn't exist") !== false) {
-        $sql = file_get_contents(__DIR__ . '/install_coordinator.sql');
+        $sql = file_get_contents(__DIR__ . '/database/install_coordinator.sql');
         $pdo->exec($sql);
     }
 }

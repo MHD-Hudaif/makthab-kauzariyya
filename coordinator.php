@@ -362,18 +362,40 @@ foreach ($classes as $class) {
         <div class="absolute bottom-[10%] right-[20%] w-[40vw] h-[40vw] max-w-[600px] bg-blue-600/10 blur-[120px] animate-blob-2"></div>
     </div>
 
+    <!-- Mobile Top Navigation Header -->
+    <header class="flex md:hidden items-center justify-between px-6 h-16 bg-[#0a0f1a]/95 border-b border-white/10 sticky top-0 z-50 backdrop-blur-md w-full">
+        <div class="flex items-center gap-2">
+            <div class="w-8 h-8 rounded-full overflow-hidden bg-slate-900 border border-white/10 flex items-center justify-center p-0.5">
+                <img src="https://kauzariyya.com/wp-content/uploads/2024/01/Kauzariyya-Old-Curve.png" alt="Logo" class="w-full h-full object-contain">
+            </div>
+            <span class="text-sm font-bold tracking-wide uppercase bg-gradient-to-r from-emerald-400 to-blue-400 bg-clip-text text-transparent">Coordinator</span>
+        </div>
+        <button onclick="toggleMobileSidebar(true)" class="w-10 h-10 flex items-center justify-center rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 transition" title="Open Sidebar Menu">
+            <i class="fa-solid fa-bars text-white text-lg"></i>
+        </button>
+    </header>
+
+    <!-- Mobile Sidebar Dark Overlay Backdrop -->
+    <div id="sidebar-overlay" onclick="toggleMobileSidebar(false)" class="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-40 hidden md:hidden transition-opacity duration-300 opacity-0 pointer-events-none"></div>
+
     <!-- Sidebar Navigation -->
-    <aside class="w-full md:w-64 bg-[#0a0f1a]/70 border border-white/10 shadow-2xl md:fixed md:top-4 md:left-4 md:bottom-4 md:h-[calc(100vh-32px)] rounded-[22px] flex flex-col justify-between p-6 z-40 backdrop-blur-md">
+    <aside id="sidebar-drawer" class="fixed inset-y-0 left-0 w-64 bg-[#0a0f1a]/95 border-r border-white/10 shadow-2xl md:fixed md:top-4 md:left-4 md:bottom-4 md:h-[calc(100vh-32px)] md:rounded-[22px] md:border flex flex-col justify-between p-6 z-50 backdrop-blur-md transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out">
         <div class="space-y-8">
             <!-- Branding Header -->
-            <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-full overflow-hidden bg-slate-900 border border-white/10 flex items-center justify-center p-1">
-                    <img src="https://kauzariyya.com/wp-content/uploads/2024/01/Kauzariyya-Old-Curve.png" alt="Logo" class="w-full h-full object-contain">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-full overflow-hidden bg-slate-900 border border-white/10 flex items-center justify-center p-1">
+                        <img src="https://kauzariyya.com/wp-content/uploads/2024/01/Kauzariyya-Old-Curve.png" alt="Logo" class="w-full h-full object-contain">
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="text-sm font-bold tracking-wide uppercase bg-gradient-to-r from-emerald-400 to-blue-400 bg-clip-text text-transparent">Coordinator</span>
+                        <span class="text-[9px] text-slate-455 tracking-widest uppercase">Al Jamiathul Kauzariyya</span>
+                    </div>
                 </div>
-                <div class="flex flex-col">
-                    <span class="text-sm font-bold tracking-wide uppercase bg-gradient-to-r from-emerald-400 to-blue-400 bg-clip-text text-transparent">Coordinator</span>
-                    <span class="text-[9px] text-slate-400 tracking-widest uppercase">Al Jamiathul Kauzariyya</span>
-                </div>
+                <!-- Close Button for Mobile -->
+                <button onclick="toggleMobileSidebar(false)" class="flex md:hidden w-8 h-8 items-center justify-center rounded-lg bg-white/5 hover:bg-white/10 border border-white/8 transition" title="Close Menu">
+                    <i class="fa-solid fa-xmark text-slate-400"></i>
+                </button>
             </div>
 
             <!-- Tab Menu -->
@@ -1167,7 +1189,34 @@ foreach ($classes as $class) {
             switchTab(tab);
         });
 
+        // Mobile Sidebar Drawer Toggle helper
+        function toggleMobileSidebar(isOpen) {
+            const sidebar = document.getElementById('sidebar-drawer');
+            const overlay = document.getElementById('sidebar-overlay');
+            
+            if (isOpen) {
+                sidebar.classList.remove('-translate-x-full');
+                overlay.classList.remove('hidden');
+                setTimeout(() => {
+                    overlay.classList.remove('opacity-0');
+                    overlay.classList.add('opacity-100');
+                    overlay.classList.add('pointer-events-auto');
+                }, 10);
+            } else {
+                sidebar.classList.add('-translate-x-full');
+                overlay.classList.remove('opacity-100');
+                overlay.classList.add('opacity-0');
+                overlay.classList.remove('pointer-events-auto');
+                setTimeout(() => {
+                    overlay.classList.add('hidden');
+                }, 300);
+            }
+        }
+
         function switchTab(tabId) {
+            // Close mobile sidebar drawer automatically on tab switch
+            toggleMobileSidebar(false);
+
             // Hide all tab content
             document.querySelectorAll('.tab-content').forEach(function(content) {
                 content.classList.add('hidden');
