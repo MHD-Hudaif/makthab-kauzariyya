@@ -6,6 +6,9 @@
  * and initializes the global $pdo instance.
  */
 
+if (!file_exists(__DIR__ . '/../vendor/autoload.php')) {
+    die("Error: The 'vendor' directory is missing. Since it is excluded by .gitignore, you must manually upload the 'vendor' folder to your server, or run 'composer install' via SSH on Bluehost.");
+}
 require_once __DIR__ . '/../vendor/autoload.php';
 
 use Dotenv\Dotenv;
