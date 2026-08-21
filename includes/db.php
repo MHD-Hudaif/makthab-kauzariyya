@@ -184,6 +184,24 @@ try {
     } catch (PDOException $ex) {}
 }
 
+// Ensure google_id column exists on users table
+try {
+    $pdo->query("SELECT google_id FROM `users` LIMIT 1");
+} catch (PDOException $e) {
+    try {
+        $pdo->exec("ALTER TABLE `users` ADD COLUMN `google_id` varchar(255) DEFAULT NULL UNIQUE AFTER `status`");
+    } catch (PDOException $ex) {}
+}
+
+// Ensure profile_photo column exists on users table
+try {
+    $pdo->query("SELECT profile_photo FROM `users` LIMIT 1");
+} catch (PDOException $e) {
+    try {
+        $pdo->exec("ALTER TABLE `users` ADD COLUMN `profile_photo` varchar(255) DEFAULT NULL AFTER `google_id`");
+    } catch (PDOException $ex) {}
+}
+
 // Coordinator / academic tables
 try {
     $pdo->query("SELECT 1 FROM `courses` LIMIT 1");

@@ -154,10 +154,14 @@ function authenticateUser(PDO $pdo, string $googleId, string $email, string $ful
         } elseif ($user['role'] === 'teacher') {
             header('Location: ' . base_url('teacher/'));
             exit;
+        } elseif ($user['role'] === 'student') {
+            header('Location: ' . base_url('student/'));
+            exit;
         } else {
             header('Location: ' . base_url('index.php'));
             exit;
         }
+    } else {
         // Save Google identity to pending session and redirect to registration page
         $_SESSION['google_pending_registration'] = [
             'google_id'     => $googleId,
