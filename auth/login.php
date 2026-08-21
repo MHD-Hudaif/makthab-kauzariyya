@@ -14,6 +14,11 @@ if (!empty($_SESSION['user'])) {
     } elseif ($role === 'teacher') {
         header('Location: ' . base_url('teacher/'));
         exit;
+    } else {
+        // This role does not have a dedicated portal yet. Do not show the
+        // sign-in form again while the user already has a valid session.
+        header('Location: ' . base_url('index.php'));
+        exit;
     }
 }
 
@@ -32,6 +37,7 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
             $user = $stmt->fetch();
 
             if ($user && password_verify($password, $user['password'])) {
+                session_regenerate_id(true);
                 $_SESSION['user'] = [
                     'id'            => $user['id'],
                     'username'      => $user['username'],
@@ -74,6 +80,7 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="../assets/css/style.css">
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body class="relative min-h-screen bg-slate-950 text-slate-100 flex items-center justify-center p-6 overflow-hidden">
 
@@ -134,9 +141,24 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
                     <span class="flex-shrink mx-4 text-[10px] text-slate-500 uppercase tracking-widest font-semibold">Or</span>
                     <div class="flex-grow border-t border-white/10"></div>
                 </div>
-                <a href="<?= base_url('auth/google.php') ?>" class="w-full flex items-center justify-center gap-2 border border-white/15 hover:bg-white/5 text-slate-200 font-bold py-3 rounded-xl transition duration-300 text-xs">
-                    <i class="fa-brands fa-google text-emerald-400"></i> Sign in with Google
-                </a>
+
+                <!-- Google Identity Services (GSI) 1-Click Sign-In -->
+                <div class="flex justify-center w-full">
+                    <div id="g_id_onload"
+                        data-client_id="<?= htmlspecialchars(env('GOOGLE_CLIENT_ID', '66449910271-dqfua3m4hgcnoccunnjbf0qa4upmvni9.apps.googleusercontent.com')) ?>"
+                        data-login_uri="<?= htmlspecialchars(base_url('auth/google.php')) ?>"
+                        data-auto_prompt="false">
+                    </div>
+                    <div class="g_id_signin w-full flex justify-center"
+                        data-type="standard"
+                        data-size="large"
+                        data-theme="outline"
+                        data-text="sign_in_with"
+                        data-shape="rectangular"
+                        data-logo_alignment="left"
+                        data-width="360">
+                    </div>
+                </div>
             </div>
         </form>
 

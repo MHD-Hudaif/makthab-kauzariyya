@@ -17,6 +17,10 @@ RewriteCond %{THE_REQUEST} \s/+(.*?)/?index(\.php)?[\s?] [NC]
 RewriteRule ^ /%1/ [R=301,L]
 
 # Redirect /page.php to /page (external redirect)
+# Google returns the OAuth authorization response to this exact URL with a
+# POST request. Redirecting it would turn the request into a GET and discard
+# the authorization fields, causing the account-selection loop.
+RewriteCond %{REQUEST_URI} !^/auth/google\.php$ [NC]
 RewriteCond %{THE_REQUEST} \s/+(.+?)\.php[\s?] [NC]
 RewriteRule ^ /%1 [R=301,L]
 

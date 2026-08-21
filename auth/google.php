@@ -9,85 +9,45 @@ $googleClientSecret = env('GOOGLE_CLIENT_SECRET', '');
 // Compute dynamic redirect URL if not explicitly defined in env
 $googleRedirectUri = env('GOOGLE_REDIRECT_URL', '');
 if (empty($googleRedirectUri) || $googleRedirectUri === 'auto') {
-    // Determine HTTP protocol
     $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || ($_SERVER['SERVER_PORT'] ?? 80) == 443 ? 'https' : 'http';
     $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
     $googleRedirectUri = $protocol . '://' . $host . base_url('auth/google.php');
 }
 
-// 1. Check if Google credentials are set up
-if (empty($googleClientId) || empty($googleClientSecret) || $googleClientId === 'your-google-client-id') {
-    die('<!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Google OAuth Setup Required</title>
-        <script src="https://cdn.tailwindcss.com"></script>
-        <link rel="stylesheet" href="../assets/css/style.css">
-    </head>
-    <body class="relative min-h-screen bg-slate-950 text-slate-100 flex items-center justify-center p-6" style="background-color:#0e2e38; color:#ecf3d6;">
-        <div class="fixed inset-0 bg-gradient-to-tr from-slate-950 via-indigo-950 to-slate-950 z-[-3]"></div>
-        <div class="w-full max-w-lg glass-panel rounded-3xl p-8 space-y-6 relative border border-white/10">
-            <div class="text-center space-y-2">
-                <i class="fa-solid fa-circle-info text-emerald-400 text-4xl mb-2"></i>
-                <h1 class="text-xl font-bold text-white">Google OAuth Setup Required</h1>
-                <p class="text-xs text-slate-400">Configure your Google Credentials in the .env file.</p>
-            </div>
-            <div class="bg-white/5 p-4 rounded-xl space-y-3 text-xs leading-relaxed text-slate-300 font-mono">
-                <div>1. Go to Google Cloud Console Credentials page.</div>
-                <div>2. Create an OAuth 2.0 Client ID.</div>
-                <div>3. Set your Redirect URI to: <br><span class="text-emerald-400 break-all">' . htmlspecialchars($googleRedirectUri) . '</span></div>
-                <div>4. Copy Client ID and Secret to your .env file:</div>
-                <div class="bg-black/30 p-2.5 rounded border border-white/5 text-slate-400">
-                    GOOGLE_CLIENT_ID=your_id_here<br>
-                    GOOGLE_CLIENT_SECRET=your_secret_here<br>
-                    GOOGLE_REDIRECT_URL=' . htmlspecialchars($googleRedirectUri) . '
-                </div>
-            </div>
-            <div class="text-center">
-                <a href="' . base_url('login') . '" class="inline-flex items-center gap-1.5 text-xs text-slate-400 hover:text-white transition">
-                    Back to Login
-                </a>
-            </div>
-        </div>
-    </body>
-    </html>');
-}
-
+$gsiCredential = $_POST['credential'] ?? '';
 $authCode = $_POST['code'] ?? $_GET['code'] ?? '';
 $authState = $_POST['state'] ?? $_GET['state'] ?? '';
 
-// 2. INITIATE OAUTH FLOW (If no authorization code returned from Google yet)
-if (empty($authCode)) {
-    // Generate secure CSRF state
-    $state = bin2hex(random_bytes(16));
-    $_SESSION['oauth_state'] = $state;
+// ─────────────────────────────────────────────────────────────────────────────
+// FLOW A: Google Identity Services (GSI) ID Token Submission (Zero Redirects)
+// ─────────────────────────────────────────────────────────────────────────────
+if (!empty($gsiCredential)) {
+    // Decode Google JWT Token (header.payload.signature)
+    $jwtParts = explode('.', $gsiCredential);
+    if (count($jwtParts) !== 3) {
+        die('Invalid Google ID Token format.');
+    }
 
-    // Build authorization redirect link using form_post to bypass ModSecurity URL filtering
-    $params = [
-        'response_type' => 'code',
-        'response_mode' => 'form_post',
-        'client_id'     => $googleClientId,
-        'redirect_uri'  => $googleRedirectUri,
-        'scope'         => 'openid email profile',
-        'state'         => $state,
-        'prompt'        => 'select_account'
-    ];
+    $payloadJson = base64_decode(strtr($jwtParts[1], '-_', '+/'));
+    $payload = json_decode($payloadJson, true);
 
-    $authUrl = 'https://accounts.google.com/o/oauth2/v2/auth?' . http_build_query($params);
-    header('Location: ' . $authUrl);
+    if (empty($payload) || empty($payload['sub']) || empty($payload['email'])) {
+        die('Unable to extract Google account information.');
+    }
+
+    $googleId = $payload['sub'];
+    $email = $payload['email'];
+    $fullName = $payload['name'] ?? 'Google User';
+    $profilePhoto = $payload['picture'] ?? null;
+
+    authenticateUser($pdo, $googleId, $email, $fullName, $profilePhoto);
     exit;
 }
 
-// 3. CALLBACK HANDLING (Google redirected user back with an authorization code)
+// ─────────────────────────────────────────────────────────────────────────────
+// FLOW B: Traditional OAuth 2.0 Authorization Code Exchange
+// ─────────────────────────────────────────────────────────────────────────────
 if (!empty($authCode)) {
-    // Verify state to prevent CSRF attacks
-    if (empty($authState) || empty($_SESSION['oauth_state']) || $authState !== $_SESSION['oauth_state']) {
-        die('OAuth validation error: State parameter mismatch. Please restart login.');
-    }
-    unset($_SESSION['oauth_state']);
-
     // Exchange auth code for access token via cURL
     $tokenUrl = 'https://oauth2.googleapis.com/token';
     $postFields = [
@@ -118,7 +78,7 @@ if (!empty($authCode)) {
         die('OAuth token error: ' . htmlspecialchars($response));
     }
 
-    // Call Google Userinfo API to fetch identity
+    // Fetch User Profile from Google UserInfo endpoint
     $userinfoUrl = 'https://www.googleapis.com/oauth2/v3/userinfo';
     $ch = curl_init($userinfoUrl);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -133,13 +93,28 @@ if (!empty($authCode)) {
     $googleId = $userInfo['sub'] ?? '';
     $email = $userInfo['email'] ?? '';
     $fullName = $userInfo['name'] ?? '';
-    $profilePhoto = $userInfo['picture'] ?? '';
+    $profilePhoto = $userInfo['picture'] ?? null;
 
     if (empty($googleId) || empty($email)) {
         die('OAuth identity failed: Google did not return required profile scopes.');
     }
 
-    // Find existing user in database by Google ID or by Email
+    authenticateUser($pdo, $googleId, $email, $fullName, $profilePhoto);
+    exit;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// FLOW C: Direct Visit without Credentials -> Redirect to Login Page
+// ─────────────────────────────────────────────────────────────────────────────
+header('Location: ' . base_url('login'));
+exit;
+
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Core Authentication & Session Handler
+// ─────────────────────────────────────────────────────────────────────────────
+function authenticateUser(PDO $pdo, string $googleId, string $email, string $fullName, ?string $profilePhoto): void {
+    // Look up user in database by Google ID or by registered Email
     $stmt = $pdo->prepare("SELECT * FROM users WHERE google_id = ? OR email = ?");
     $stmt->execute([$googleId, $email]);
     $user = $stmt->fetch();
@@ -149,15 +124,17 @@ if (!empty($authCode)) {
             die('Access Denied: Your account is suspended or inactive.');
         }
 
-        // Auto-link Google ID if they have a matching email but google_id wasn't linked yet
-        if (empty($user['google_id'])) {
-            $upd = $pdo->prepare("UPDATE users SET google_id = ?, profile_photo = ? WHERE id = ?");
+        // Link Google ID and update profile photo if not present
+        if (empty($user['google_id']) || empty($user['profile_photo'])) {
+            $upd = $pdo->prepare("UPDATE users SET google_id = ?, profile_photo = COALESCE(profile_photo, ?) WHERE id = ?");
             $upd->execute([$googleId, $profilePhoto, $user['id']]);
             $user['google_id'] = $googleId;
-            $user['profile_photo'] = $profilePhoto;
+            if (empty($user['profile_photo'])) {
+                $user['profile_photo'] = $profilePhoto;
+            }
         }
 
-        // Set session
+        // Store user in session
         $_SESSION['user'] = [
             'id'            => $user['id'],
             'username'      => $user['username'],
@@ -167,7 +144,7 @@ if (!empty($authCode)) {
             'profile_photo' => $user['profile_photo'],
         ];
 
-        // Redirect based on role
+        // Redirect based on user role
         if ($user['role'] === 'admin') {
             header('Location: ' . base_url('admin/'));
             exit;
@@ -182,7 +159,7 @@ if (!empty($authCode)) {
             exit;
         }
     } else {
-        // User not registered in database
+        // Unregistered user block screen
         die('<!DOCTYPE html>
         <html lang="en">
         <head>
