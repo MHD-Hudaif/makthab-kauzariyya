@@ -55,15 +55,19 @@ if (empty($googleClientId) || empty($googleClientSecret) || $googleClientId === 
     </html>');
 }
 
+$authCode = $_POST['code'] ?? $_GET['code'] ?? '';
+$authState = $_POST['state'] ?? $_GET['state'] ?? '';
+
 // 2. INITIATE OAUTH FLOW (If no authorization code returned from Google yet)
-if (!isset($_GET['code'])) {
+if (empty($authCode)) {
     // Generate secure CSRF state
     $state = bin2hex(random_bytes(16));
     $_SESSION['oauth_state'] = $state;
 
-    // Build authorization redirect link
+    // Build authorization redirect link using form_post to bypass ModSecurity URL filtering
     $params = [
         'response_type' => 'code',
+        'response_mode' => 'form_post',
         'client_id'     => $googleClientId,
         'redirect_uri'  => $googleRedirectUri,
         'scope'         => 'openid email profile',
@@ -77,10 +81,9 @@ if (!isset($_GET['code'])) {
 }
 
 // 3. CALLBACK HANDLING (Google redirected user back with an authorization code)
-if (isset($_GET['code'])) {
+if (!empty($authCode)) {
     // Verify state to prevent CSRF attacks
-    $state = $_GET['state'] ?? '';
-    if (empty($state) || empty($_SESSION['oauth_state']) || $state !== $_SESSION['oauth_state']) {
+    if (empty($authState) || empty($_SESSION['oauth_state']) || $authState !== $_SESSION['oauth_state']) {
         die('OAuth validation error: State parameter mismatch. Please restart login.');
     }
     unset($_SESSION['oauth_state']);
@@ -88,7 +91,7 @@ if (isset($_GET['code'])) {
     // Exchange auth code for access token via cURL
     $tokenUrl = 'https://oauth2.googleapis.com/token';
     $postFields = [
-        'code'          => $_GET['code'],
+        'code'          => $authCode,
         'client_id'     => $googleClientId,
         'client_secret' => $googleClientSecret,
         'redirect_uri'  => $googleRedirectUri,
