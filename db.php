@@ -2,7 +2,8 @@
 // Auto-detect environment (localhost/Laragon vs. Production Bluehost)
 $isLocalhost = in_array($_SERVER['HTTP_HOST'] ?? '', ['localhost', '127.0.0.1'], true) 
                || str_ends_with($_SERVER['HTTP_HOST'] ?? '', '.local')
-               || str_ends_with($_SERVER['HTTP_HOST'] ?? '', '.test');
+               || str_ends_with($_SERVER['HTTP_HOST'] ?? '', '.test')
+               || php_sapi_name() === 'cli';
 
 if ($isLocalhost) {
     // Localhost Development Credentials (detect Laragon port 3306 or 3307)
@@ -56,3 +57,43 @@ try {
         die("Database connection failed: " . $e->getMessage());
     }
 }
+
+// Auto-migrate tables if not exists
+try {
+    $pdo->query("SELECT 1 FROM `users` LIMIT 1");
+} catch (PDOException $e) {
+    // Table 'users' doesn't exist (SQLSTATE 42S02)
+    if ($e->getCode() == '42S02' || strpos($e->getMessage(), "doesn't exist") !== false) {
+        $sql = file_get_contents(__DIR__ . '/install_users.sql');
+        $pdo->exec($sql);
+
+        // Seed Default Users
+        $defaultUsers = [
+            ['admin', 'admin@kauzariyya.com', 'admin123', 'Administrator', 'admin'],
+            ['supervisor', 'supervisor@kauzariyya.com', 'supervisor123', 'Head Supervisor', 'supervisor'],
+            ['coordinator', 'coordinator@kauzariyya.com', 'coordinator123', 'Academic Coordinator', 'coordinator'],
+            ['teacher', 'teacher@kauzariyya.com', 'teacher123', 'Sample Teacher', 'teacher'],
+            ['student', 'student@kauzariyya.com', 'student123', 'Sample Student', 'student']
+        ];
+
+        $stmt = $pdo->prepare("INSERT INTO `users` (username, email, password, full_name, role, status) VALUES (?, ?, ?, ?, ?, 'active')");
+        
+        foreach ($defaultUsers as $user) {
+            $hashedPassword = password_hash($user[2], PASSWORD_DEFAULT);
+            $stmt->execute([$user[0], $user[1], $hashedPassword, $user[3], $user[4]]);
+            
+            // Get inserted user id
+            $userId = $pdo->lastInsertId();
+            
+            // Seed role-specific profiles
+            if ($user[4] === 'student') {
+                $studentStmt = $pdo->prepare("INSERT INTO `students` (user_id, admission_no, parent_name, class_name, dob) VALUES (?, ?, ?, ?, ?)");
+                $studentStmt->execute([$userId, 'ADM-2026-001', 'John Doe Sr.', 'Class 5', '2015-05-15']);
+            } elseif ($user[4] === 'teacher') {
+                $teacherStmt = $pdo->prepare("INSERT INTO `teachers` (user_id, specialisation, date_of_joining) VALUES (?, ?, ?)");
+                $teacherStmt->execute([$userId, 'Quran Recitation & Tajweed', '2020-06-01']);
+            }
+        }
+    }
+}
+
