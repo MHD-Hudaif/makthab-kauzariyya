@@ -175,6 +175,15 @@ try {
     }
 }
 
+// Ensure place column exists on users table
+try {
+    $pdo->query("SELECT place FROM `users` LIMIT 1");
+} catch (PDOException $e) {
+    try {
+        $pdo->exec("ALTER TABLE `users` ADD COLUMN `place` varchar(150) DEFAULT NULL AFTER `phone`");
+    } catch (PDOException $ex) {}
+}
+
 // Coordinator / academic tables
 try {
     $pdo->query("SELECT 1 FROM `courses` LIMIT 1");

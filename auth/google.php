@@ -158,36 +158,14 @@ function authenticateUser(PDO $pdo, string $googleId, string $email, string $ful
             header('Location: ' . base_url('index.php'));
             exit;
         }
-    } else {
-        // Unregistered user block screen
-        die('<!DOCTYPE html>
-        <html lang="en">
-        <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Account Not Registered</title>
-            <script src="https://cdn.tailwindcss.com"></script>
-            <link rel="stylesheet" href="../assets/css/style.css">
-        </head>
-        <body class="relative min-h-screen bg-slate-950 text-slate-100 flex items-center justify-center p-6" style="background-color:#0e2e38; color:#ecf3d6;">
-            <div class="fixed inset-0 bg-gradient-to-tr from-slate-950 via-indigo-950 to-slate-950 z-[-3]"></div>
-            <div class="w-full max-w-md glass-panel rounded-3xl p-8 space-y-6 relative border border-white/10 text-center">
-                <div class="space-y-2">
-                    <i class="fa-solid fa-user-xmark text-red-400 text-5xl mb-2"></i>
-                    <h1 class="text-xl font-bold text-white">Google Login Access Denied</h1>
-                    <p class="text-xs text-slate-400">Account Not Registered</p>
-                </div>
-                <p class="text-xs text-slate-300 leading-relaxed">
-                    No account matching <span class="text-emerald-400 font-semibold">' . htmlspecialchars($email) . '</span> was found in our registration directory.<br><br>
-                    Please contact your Academic Coordinator or Administrator to register your profile first.
-                </p>
-                <div class="pt-4">
-                    <a href="' . base_url('login') . '" class="inline-flex items-center gap-1.5 text-xs bg-white/5 border border-white/15 px-4 py-2.5 rounded-xl text-slate-200 hover:text-white transition">
-                        Back to Login
-                    </a>
-                </div>
-            </div>
-        </body>
-        </html>');
+        // Save Google identity to pending session and redirect to registration page
+        $_SESSION['google_pending_registration'] = [
+            'google_id'     => $googleId,
+            'email'         => $email,
+            'full_name'     => $fullName,
+            'profile_photo' => $profilePhoto,
+        ];
+        header('Location: ' . base_url('register'));
+        exit;
     }
 }

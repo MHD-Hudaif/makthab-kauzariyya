@@ -27,6 +27,8 @@ RewriteRule ^ /%1 [R=301,L]
 # Route clean login/logout URLs directly to the auth/ folder
 RewriteRule ^login$ auth/login.php [L,NC]
 RewriteRule ^logout$ auth/logout.php [L,NC]
+RewriteRule ^register$ auth/register.php [L,NC]
+RewriteRule ^signup$ auth/register.php [L,NC]
 
 # Map /page to /page.php internally (internal rewrite)
 RewriteCond %{REQUEST_FILENAME} !-d

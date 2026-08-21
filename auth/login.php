@@ -162,9 +162,12 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
             </div>
         </form>
 
-        <div class="text-center">
-            <a href="<?= base_url('index.php') ?>" class="inline-flex items-center gap-1.5 text-xs text-slate-400 hover:text-white transition">
-                <i class="fa-solid fa-arrow-left"></i> Back to Homepage
+        <div class="text-center pt-2 border-t border-white/10 flex justify-between items-center text-xs text-slate-400">
+            <a href="<?= base_url('register') ?>" class="text-emerald-400 font-bold hover:text-emerald-300 transition flex items-center gap-1">
+                <i class="fa-solid fa-user-plus text-[10px]"></i> New Student? Sign Up
+            </a>
+            <a href="<?= base_url('index.php') ?>" class="hover:text-white transition">
+                Homepage
             </a>
         </div>
 
