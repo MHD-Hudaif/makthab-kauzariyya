@@ -327,155 +327,30 @@ try {
     } catch (PDOException $ex) {}
 }
 
-// Verification Roster Table & Initial Data Seeding
+// Verification Roster Table
 try {
-    $pdo->exec("
-        CREATE TABLE IF NOT EXISTS `verification_roster` (
-            `id` INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-            `type` ENUM('teacher', 'student') NOT NULL,
-            `name` VARCHAR(200) NOT NULL,
-            `assigned_teacher_name` VARCHAR(200) DEFAULT NULL,
-            `is_claimed` TINYINT(1) DEFAULT 0,
-            `claimed_user_id` INT UNSIGNED DEFAULT NULL,
-            `claimed_at` DATETIME DEFAULT NULL,
-            `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            INDEX (`type`),
-            INDEX (`name`),
-            INDEX (`is_claimed`)
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-    ");
+    $pdo->query("SELECT 1 FROM `verification_roster` LIMIT 1");
+} catch (PDOException $e) {
+    if ($e->getCode() == '42S02' || str_contains($e->getMessage(), "doesn't exist")) {
+        try {
+            $pdo->exec("
+                CREATE TABLE IF NOT EXISTS `verification_roster` (
+                    `id` INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+                    `type` ENUM('teacher', 'student') NOT NULL,
+                    `name` VARCHAR(200) NOT NULL,
+                    `assigned_teacher_name` VARCHAR(200) DEFAULT NULL,
+                    `is_claimed` TINYINT(1) DEFAULT 0,
+                    `claimed_user_id` INT UNSIGNED DEFAULT NULL,
+                    `claimed_at` DATETIME DEFAULT NULL,
+                    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    INDEX (`type`),
+                    INDEX (`name`),
+                    INDEX (`is_claimed`)
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+            ");
+        } catch (PDOException $ex) {}
+    }
+}
 
-    $rosterCount = (int)$pdo->query("SELECT COUNT(*) FROM `verification_roster`")->fetchColumn();
-    if ($rosterCount === 0) {
-        // Seed Initial Teachers & Students
-        $initialRoster = [
-                // Teachers
-                ['teacher', 'NOOH USTAD', null],
-                ['teacher', 'SUHAIL USTAD', null],
-                ['teacher', 'ASHIF USTAD', null],
-                ['teacher', 'USMAN USTAD', null],
-                ['teacher', 'JAUHAR USTAD', null],
-                ['teacher', 'ABBAS USTAD', null],
-                ['teacher', 'ALTHAF ISMAIL USTAD', null],
-                ['teacher', 'NIZAR USTAD', null],
-                ['teacher', 'ABDULLA KP USTAD', null],
-                ['teacher', 'ALTHAF KO USTAD', null],
-                ['teacher', 'FAWAZ USTAD', null],
-                ['teacher', 'ABDULRAHMAN USTAD', null],
-                ['teacher', 'ANAS USTAD', null],
-                ['teacher', 'MUHSIN USTAD', null],
-                ['teacher', 'BILAL USTAD', null],
-                ['teacher', 'ALTHAF MANARI USTAD', null],
-                ['teacher', 'BILAL TDP USTAD', null],
-                ['teacher', 'ABID USTAD', null],
-                ['teacher', 'HASEEB USTAD', null],
-                ['teacher', 'ANSIF USTAD', null],
-                ['teacher', 'ABDULLA IBRAHIM USTAD', null],
-                ['teacher', 'AMEEN USTAD', null],
-                ['teacher', 'YASEEN USTAD', null],
-                ['teacher', 'IHSAN USTAD', null],
-                ['teacher', 'ADIL USTAD', null],
-                ['teacher', 'ASHIQ USTAD', null],
-                ['teacher', 'ALTHAF USTAD KOLLAM', null],
-                ['teacher', 'THAHA USTAD', null],
-                ['teacher', 'SUMAYYA TEACHER', null],
-                ['teacher', 'FATHIMA TK TEACHER', null],
-                ['teacher', 'ADHILA TEACHER', null],
-                ['teacher', 'AYISHA HUSAIN TEACHER', null],
-                ['teacher', 'RUSHDA TEACHER', null],
-                ['teacher', 'MANSOORA TEACHER', null],
-                ['teacher', 'AMINA TEACHER', null],
-                ['teacher', 'FIDA TEACHER', null],
-                ['teacher', 'HALEEMA ZUBAIR TEACHER', null],
-                ['teacher', 'HANAN TEACHER', null],
-                ['teacher', 'AYISHA KABEER TEACHER', null],
-                ['teacher', 'AYISHA S TEACHER', null],
-                ['teacher', 'HIBA TEACHER', null],
-                ['teacher', 'FATHIMA ZAHRA TEACHER', null],
-                ['teacher', 'HIBA SHERIN TEACHER', null],
-                ['teacher', 'AISHA S TEACHER', null],
-
-                // Students (with assigned teachers)
-                ['student', 'MIRZA', 'NOOH USTAD'],
-                ['student', 'SHANAVAS KOCHI', 'SUHAIL USTAD'],
-                ['student', 'NOUFAL', 'ASHIF USTAD'],
-                ['student', 'FAHEEM', 'ASHIF USTAD'],
-                ['student', 'AMMAR WASEEM Pathanamthitta', 'USMAN USTAD'],
-                ['student', 'SAINUDHEEN', 'JAUHAR USTAD'],
-                ['student', 'SALMAN JAMSHEER', 'ABBAS USTAD'],
-                ['student', 'SANEEJ', 'ALTHAF ISMAIL USTAD'],
-                ['student', 'IZAN SANEEJ', 'NIZAR USTAD'],
-                ['student', 'IMRAN', 'ASHIF USTAD'],
-                ['student', 'IMAAD', 'ABDULLA KP USTAD'],
-                ['student', 'FADHIL JANEESH', 'ALTHAF KO USTAD'],
-                ['student', 'DHAKIR', 'FAWAZ USTAD'],
-                ['student', 'TUFAIL', 'ABDULRAHMAN USTAD'],
-                ['student', 'KHALID', 'ANAS USTAD'],
-                ['student', 'ZAID', 'MUHSIN USTAD'],
-                ['student', 'AMAN', 'MUHSIN USTAD'],
-                ['student', 'YASEEN', 'MUHSIN USTAD'],
-                ['student', 'HAMDAN', 'BILAL USTAD'],
-                ['student', 'HISHAM ADIVADU BALIGAN', 'ALTHAF MANARI USTAD'],
-                ['student', 'ADHIL BALIGAN', 'ALTHAF MANARI USTAD'],
-                ['student', 'RAFI KOLLAM', 'FAWAZ USTAD'],
-                ['student', 'AMEEN KANJIRAPALLY', 'BILAL TDP USTAD'],
-                ['student', 'AMEEN PUNE', 'ABID USTAD'],
-                ['student', 'PCS MUZAMMIL', 'BILAL TDP USTAD'],
-                ['student', 'JAMSHEER MLV', 'FAWAZ USTAD'],
-                ['student', 'ALTHAF TDP', 'HASEEB USTAD'],
-                ['student', 'ANSHAD SAUDI', 'SUHAIL USTAD'],
-                ['student', 'ANAS', 'ANSIF USTAD'],
-                ['student', 'FARHAN BALIGAN', 'ANAS USTAD'],
-                ['student', 'SHAN MUMBAI CL 9', 'ABDULLA IBRAHIM USTAD'],
-                ['student', 'MINHAJ', 'AMEEN USTAD'],
-                ['student', 'NOUFAL KOLLAM', 'ABDULLA IBRAHIM USTAD'],
-                ['student', 'ASHEHAD', 'ABDULLA KP USTAD'],
-                ['student', 'AFFAN MALA', 'YASEEN USTAD'],
-                ['student', 'ISADUL ALI', null],
-                ['student', 'MUAD', 'IHSAN USTAD'],
-                ['student', 'YAHYA', 'ANSIF USTAD'],
-                ['student', 'AMIR YAHYA', 'ABDULLA KP USTAD'],
-                ['student', 'AHMAD ADIL', 'ADIL USTAD'],
-                ['student', 'ALTHAF SALAHUDHEEN', 'ASHIQ USTAD'],
-                ['student', 'ABDULLA ILYAS MLV', 'ANSIF USTAD'],
-                ['student', 'UMARUL FAROOQ', 'ALTHAF USTAD KOLLAM'],
-                ['student', 'MUZAMMIL FAIZAL', 'THAHA USTAD'],
-                ['student', 'UMAR FAIZAL', 'THAHA USTAD'],
-                ['student', 'SUMAYYA IBRAHIM', 'SUMAYYA TEACHER'],
-                ['student', 'NISA ADHIL UMMA', 'FATHIMA TK TEACHER'],
-                ['student', 'SWALIHA FATHIMA', 'SUMAYYA TEACHER'],
-                ['student', 'ABINA', 'ADHILA TEACHER'],
-                ['student', 'ISHAN', 'AYISHA HUSAIN TEACHER'],
-                ['student', 'HAMRA', 'RUSHDA TEACHER'],
-                ['student', 'BEEMA', 'AYISHA HUSAIN TEACHER'],
-                ['student', 'SHAHANA ITHA', 'MANSOORA TEACHER'],
-                ['student', 'FILLATH', 'AMINA TEACHER'],
-                ['student', 'AJMIYA', 'MANSOORA TEACHER'],
-                ['student', 'AIZA SANEEJ', 'FIDA TEACHER'],
-                ['student', 'HAZINE SANEEJ', 'FIDA TEACHER'],
-                ['student', 'HAAZIQ SANEEJ', 'RUSHDA TEACHER'],
-                ['student', 'IZZA EDATHALA', 'HALEEMA ZUBAIR TEACHER'],
-                ['student', 'HANNA', 'HANAN TEACHER'],
-                ['student', 'ZULAIKHA', 'AYISHA KABEER TEACHER'],
-                ['student', 'SUMAYYA', 'AYISHA S TEACHER'],
-                ['student', 'HIBA', 'AYISHA S TEACHER'],
-                ['student', 'AMNA DUBAI', 'HIBA TEACHER'],
-                ['student', 'IHAAN', 'FATHIMA ZAHRA TEACHER'],
-                ['student', 'SHAHANA SHAMSHEER', 'AYISHA KABEER TEACHER'],
-                ['student', 'NADIYA', 'ADHILA TEACHER'],
-                ['student', 'YAQUB', 'HALEEMA ZUBAIR TEACHER'],
-                ['student', 'ASIYA NASRIN', 'AYISHA HUSSAIN TEACHER'],
-                ['student', 'IMRAN JEDDAH', 'HIBA SHERIN TEACHER'],
-                ['student', 'NAJUMA', 'HIBA SHERIN TEACHER'],
-                ['student', 'FATHIMA ZAHRA CHRNLR', 'AISHA S TEACHER'],
-                ['student', 'SUHAILA', null]
-            ];
-
-            $stmtIns = $pdo->prepare("INSERT INTO `verification_roster` (type, name, assigned_teacher_name) VALUES (?, ?, ?)");
-            foreach ($initialRoster as $row) {
-                $stmtIns->execute([$row[0], $row[1], $row[2]]);
-            }
-        }
-    } catch (PDOException $ex) {}
 
 
