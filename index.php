@@ -52,11 +52,14 @@ $totalCourses = $pdo->query("SELECT COUNT(*) FROM courses")->fetchColumn();
             </div>
 
             <!-- Desktop Action Buttons -->
-            <div class="hidden md:flex items-center gap-4">
+            <div class="hidden md:flex items-center gap-3">
                 <a href="https://www.instagram.com/kauzariyya/" target="_blank" class="w-10 h-10 rounded-full glass-card flex items-center justify-center transition" style="color:rgba(236,243,214,0.7);" title="Follow us on Instagram">
                     <i class="fa-brands fa-instagram text-lg"></i>
                 </a>
-                <a href="register" class="brand-gradient px-5 py-2 rounded-full font-semibold transition duration-300" style="color:#0e2e38; box-shadow:0 4px 16px rgba(109,204,141,0.2);">
+                <a href="verify" class="glass-card px-4 py-2 rounded-full font-bold text-xs transition border border-emerald-400/30 text-emerald-300 hover:bg-emerald-500/10 flex items-center gap-1.5">
+                    <i class="fa-solid fa-user-check text-[11px]"></i> Member Verification
+                </a>
+                <a href="register" class="brand-gradient px-5 py-2 rounded-full font-semibold text-xs transition duration-300" style="color:#0e2e38; box-shadow:0 4px 16px rgba(109,204,141,0.2);">
                     Admission Open
                 </a>
             </div>
@@ -71,6 +74,7 @@ $totalCourses = $pdo->query("SELECT COUNT(*) FROM courses")->fetchColumn();
         <div id="mobile-menu" class="hidden md:hidden border-t backdrop-blur-md transition-all duration-300 w-full px-6 py-4 space-y-3" style="background:rgba(14,46,56,0.97); border-color:rgba(109,204,141,0.12);">
             <a href="#home" onclick="toggleMobileMenu()" class="block text-sm font-medium py-2 transition" style="color:rgba(236,243,214,0.7);">Home</a>
             <a href="coordinator/index" onclick="toggleMobileMenu()" class="block text-sm font-semibold py-2 transition" style="color:#6dcc8d;"><i class="fa-solid fa-chart-pie mr-1 text-[11px]"></i>Panel</a>
+            <a href="verify" onclick="toggleMobileMenu()" class="block text-sm font-semibold py-2 transition" style="color:#a7ebf3;"><i class="fa-solid fa-user-check mr-1.5 text-xs"></i> Old Student / Teacher Verification</a>
             <a href="#about" onclick="toggleMobileMenu()" class="block text-sm font-medium py-2 transition" style="color:rgba(236,243,214,0.7);">About</a>
             <a href="#courses" onclick="toggleMobileMenu()" class="block text-sm font-medium py-2 transition" style="color:rgba(236,243,214,0.7);">Courses</a>
             <a href="#socials" onclick="toggleMobileMenu()" class="block text-sm font-medium py-2 transition" style="color:rgba(236,243,214,0.7);">Socials</a>
@@ -107,12 +111,15 @@ $totalCourses = $pdo->query("SELECT COUNT(*) FROM courses")->fetchColumn();
                     Welcome to Maktab Kauzariyya — مكتب كوثرية. We are committed to fostering deep academic learning and spiritual enlightenment to build leaders for tomorrow.
                 </p>
 
-                <div class="pt-4 flex flex-col sm:flex-row justify-center gap-4">
-                    <a href="register" class="glass-highlight relative overflow-hidden brand-gradient px-8 py-4 rounded-xl font-bold transition" style="color:#0e2e38; box-shadow:0 8px 24px rgba(109,204,141,0.2);">
-                        Student Admission
+                <div class="pt-4 flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center justify-start gap-3.5">
+                    <a href="register" class="glass-highlight relative overflow-hidden brand-gradient px-6 py-3.5 rounded-xl font-bold transition text-center text-xs md:text-sm" style="color:#0e2e38; box-shadow:0 8px 24px rgba(109,204,141,0.2);">
+                        <i class="fa-solid fa-user-plus mr-1"></i> Student Admission
                     </a>
-                    <a href="#courses" class="glass-card flex items-center justify-center gap-2 px-8 py-4 rounded-xl font-bold transition border border-white/10 hover:border-white/20" style="color:#ecf3d6;">
-                        Explore Our Courses
+                    <a href="verify" class="glass-card flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl font-bold transition border border-emerald-400/30 hover:border-emerald-400 text-emerald-300 hover:bg-emerald-500/10 text-xs md:text-sm">
+                        <i class="fa-solid fa-user-check text-emerald-400"></i> Old Student / Teacher Verification
+                    </a>
+                    <a href="#courses" class="glass-card flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl font-bold transition border border-white/10 hover:border-white/20 text-slate-200 text-xs md:text-sm">
+                        Explore Courses
                     </a>
                 </div>
             </div>
