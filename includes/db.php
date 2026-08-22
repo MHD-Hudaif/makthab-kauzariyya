@@ -475,7 +475,7 @@ try {
             foreach ($initialRoster as $row) {
                 $stmtIns->execute([$row[0], $row[1], $row[2]]);
             }
-    }
-} catch (PDOException $ex) {}
+        }
+    } catch (PDOException $ex) {}
 
 
