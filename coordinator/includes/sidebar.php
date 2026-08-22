@@ -59,6 +59,9 @@ $currentPage = basename($_SERVER['PHP_SELF']);
                     <a href="students" class="tab-btn w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold transition border border-transparent <?= $currentPage === 'students.php' ? 'active' : '' ?>" style="color:rgba(236,243,214,0.7);">
                         <i class="fa-solid fa-user-graduate w-4"></i> Students
                     </a>
+                    <a href="roster" class="tab-btn w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold transition border border-transparent <?= $currentPage === 'roster.php' ? 'active' : '' ?>" style="color:rgba(236,243,214,0.7);">
+                        <i class="fa-solid fa-clipboard-list w-4"></i> Verification Roster
+                    </a>
                 </div>
             </nav>
         </div>

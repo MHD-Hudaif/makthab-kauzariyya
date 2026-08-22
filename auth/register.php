@@ -33,6 +33,10 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
         $email = trim($_POST['email'] ?? '');
         $phone = trim($_POST['phone'] ?? '');
         $place = trim($_POST['place'] ?? '');
+        $gender = trim($_POST['gender'] ?? 'male');
+        if (!in_array($gender, ['male', 'female'], true)) {
+            $gender = 'male';
+        }
         $parentName = trim($_POST['parent_name'] ?? '');
         $dob = !empty($_POST['dob']) ? $_POST['dob'] : null;
         $password = $_POST['password'] ?? '';
@@ -43,7 +47,7 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
 
         // If manual registration without Google, password is required
         if (!$googlePending && empty($password)) {
-            throw new Exception("Please enter a password for your account.");
+            throw new Exception("Please enter a secure password.");
         }
 
         // Check if username already exists
@@ -69,10 +73,10 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
 
         // 1. Insert into users as 'inactive' (pending coordinator approval)
         $stmtUser = $pdo->prepare("
-            INSERT INTO users (username, email, phone, place, password, full_name, role, status, google_id, profile_photo) 
-            VALUES (?, ?, ?, ?, ?, ?, 'student', 'inactive', ?, ?)
+            INSERT INTO users (username, email, phone, place, password, full_name, gender, role, status, google_id, profile_photo) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, 'student', 'inactive', ?, ?)
         ");
-        $stmtUser->execute([$username, $email, $phone, $place, $passwordHash, $fullName, $googleId, $profilePhoto]);
+        $stmtUser->execute([$username, $email, $phone, $place, $passwordHash, $fullName, $gender, $googleId, $profilePhoto]);
         $userId = $pdo->lastInsertId();
 
         // 2. Generate admission number & insert into students table
@@ -230,12 +234,29 @@ $prefillUsername = preg_replace('/[^a-zA-Z0-9_]/', '', $prefillUsername);
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- Gender -->
+                <div class="space-y-1.5">
+                    <label class="text-xs text-slate-400 font-semibold uppercase tracking-wider">Gender <span class="text-red-400">*</span></label>
+                    <div class="grid grid-cols-2 gap-3">
+                        <label class="flex items-center justify-center gap-2 p-3 rounded-xl border border-white/10 bg-white/5 cursor-pointer text-xs font-semibold text-slate-200 has-[:checked]:border-emerald-400 has-[:checked]:bg-emerald-500/10 has-[:checked]:text-emerald-300 transition">
+                            <input type="radio" name="gender" value="male" <?= ($_POST['gender'] ?? 'male') === 'male' ? 'checked' : '' ?> class="accent-emerald-400">
+                            <i class="fa-solid fa-mars text-sm"></i> Male
+                        </label>
+                        <label class="flex items-center justify-center gap-2 p-3 rounded-xl border border-white/10 bg-white/5 cursor-pointer text-xs font-semibold text-slate-200 has-[:checked]:border-pink-400 has-[:checked]:bg-pink-500/10 has-[:checked]:text-pink-300 transition">
+                            <input type="radio" name="gender" value="female" <?= ($_POST['gender'] ?? '') === 'female' ? 'checked' : '' ?> class="accent-pink-400">
+                            <i class="fa-solid fa-venus text-sm"></i> Female
+                        </label>
+                    </div>
+                </div>
+
                 <!-- Date of Birth (Optional) -->
                 <div class="space-y-1.5">
                     <label class="text-xs text-slate-400 font-semibold uppercase tracking-wider">Date of Birth</label>
                     <input type="date" name="dob" value="<?= htmlspecialchars($_POST['dob'] ?? '') ?>" class="glass-input w-full px-4 py-3 rounded-xl text-sm">
                 </div>
+            </div>
 
+            <div class="grid grid-cols-1 gap-4">
                 <!-- Password (Optional if Google user) -->
                 <div class="space-y-1.5">
                     <label class="text-xs text-slate-400 font-semibold uppercase tracking-wider">
