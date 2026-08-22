@@ -49,9 +49,10 @@ try {
     // 3. Clear existing unclaimed roster to prevent duplicate entries
     $pdo->exec("DELETE FROM `verification_roster` WHERE `is_claimed` = 0");
 
-    // 4. Initial Roster Dataset (44 Teachers + 73 Students = 117 Total)
+    // 4. Initial Roster Dataset
     $rosterData = [
-        // --- 44 TEACHERS & USTADS ---
+        // --- TEACHERS & USTADS ---
+        ['teacher', 'HUDAIF USTAD', null],
         ['teacher', 'NOOH USTAD', null],
         ['teacher', 'SUHAIL USTAD', null],
         ['teacher', 'ASHIF USTAD', null],

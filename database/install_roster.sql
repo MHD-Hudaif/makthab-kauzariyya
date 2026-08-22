@@ -23,8 +23,9 @@ CREATE TABLE IF NOT EXISTS `verification_roster` (
   INDEX (`is_claimed`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- 3. Seed Teachers & Ustads (44 Faculty Members)
+-- 3. Seed Teachers & Ustads
 INSERT INTO `verification_roster` (`type`, `name`, `assigned_teacher_name`) VALUES
+('teacher', 'HUDAIF USTAD', NULL),
 ('teacher', 'NOOH USTAD', NULL),
 ('teacher', 'SUHAIL USTAD', NULL),
 ('teacher', 'ASHIF USTAD', NULL),

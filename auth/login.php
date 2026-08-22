@@ -28,15 +28,24 @@ if (!empty($_SESSION['user'])) {
 $error = '';
 
 if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
-    $username = trim($_POST['username'] ?? '');
+    $loginInput = trim($_POST['username'] ?? '');
     $password = $_POST['password'] ?? '';
 
-    if (empty($username) || empty($password)) {
-        $error = 'Please enter both username and password.';
+    if (empty($loginInput) || empty($password)) {
+        $error = 'Please enter your username, email, or mobile number, and password.';
     } else {
         try {
-            $stmt = $pdo->prepare("SELECT * FROM users WHERE username = ?");
-            $stmt->execute([$username]);
+            // Support login via username, email, or phone number
+            $cleanPhone = preg_replace('/[^0-9]/', '', $loginInput);
+            $stmt = $pdo->prepare("
+                SELECT * FROM users 
+                WHERE username = ? 
+                   OR email = ? 
+                   OR phone = ? 
+                   OR (phone != '' AND REPLACE(REPLACE(REPLACE(phone, ' ', ''), '-', ''), '+', '') = ?)
+                LIMIT 1
+            ");
+            $stmt->execute([$loginInput, $loginInput, $loginInput, $cleanPhone]);
             $user = $stmt->fetch();
 
             if ($user && password_verify($password, $user['password'])) {
@@ -84,7 +93,7 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
                 }
                 }
             } else {
-                $error = 'Invalid username or password.';
+                $error = 'Invalid username, email, mobile number, or password.';
             }
         } catch (PDOException $e) {
             $error = 'Database error: ' . $e->getMessage();
@@ -145,18 +154,18 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
         <!-- Form — posts to itself -->
         <form action="" method="POST" class="space-y-4">
             <div class="space-y-1.5">
-                <label for="username" class="text-xs text-slate-400 font-semibold uppercase tracking-wider">Username</label>
+                <label for="username" class="text-xs text-slate-300 font-semibold uppercase tracking-wider">Username, Email, or Mobile</label>
                 <div class="relative">
-                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-500"><i class="fa-regular fa-user"></i></span>
-                    <input type="text" name="username" id="username" class="glass-input w-full pl-10 pr-4 py-3 rounded-xl text-sm" placeholder="Enter username" required autocomplete="username">
+                    <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-500"><i class="fa-regular fa-user text-sm"></i></span>
+                    <input type="text" name="username" id="username" value="<?= htmlspecialchars($_POST['username'] ?? '') ?>" class="w-full bg-white text-slate-950 font-semibold placeholder:text-slate-400 pl-10 pr-4 py-3.5 rounded-xl text-sm border-2 border-slate-200 focus:border-emerald-500 focus:outline-none focus:ring-4 focus:ring-emerald-500/15 transition shadow-sm" placeholder="Username, email, or mobile" required autocomplete="username">
                 </div>
             </div>
 
             <div class="space-y-1.5">
-                <label for="password" class="text-xs text-slate-400 font-semibold uppercase tracking-wider">Password</label>
+                <label for="password" class="text-xs text-slate-300 font-semibold uppercase tracking-wider">Password</label>
                 <div class="relative">
-                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-500"><i class="fa-solid fa-lock"></i></span>
-                    <input type="password" name="password" id="password" class="glass-input w-full pl-10 pr-4 py-3 rounded-xl text-sm" placeholder="Enter password" required autocomplete="current-password">
+                    <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-500"><i class="fa-solid fa-lock text-sm"></i></span>
+                    <input type="password" name="password" id="password" class="w-full bg-white text-slate-950 font-semibold placeholder:text-slate-400 pl-10 pr-4 py-3.5 rounded-xl text-sm border-2 border-slate-200 focus:border-emerald-500 focus:outline-none focus:ring-4 focus:ring-emerald-500/15 transition shadow-sm" placeholder="Enter password" required autocomplete="current-password">
                 </div>
             </div>
 
